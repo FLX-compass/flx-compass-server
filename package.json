@@ -1,0 +1,19 @@
+{
+   "name": "flx-compass-api",
+   "version": "0.1.0",
+   "description": "FLXcompass API using Traversy course",
+   "main": "server.js",
+   "scripts": {
+      "start": "NODE_ENV=production node server",
+      "dev": "nodemon server"
+   },
+   "author": "Jason Bunnell",
+   "license": "ISC",
+   "dependencies": {
+      "dotenv": "^8.2.0",
+      "express": "^4.17.1"
+   },
+   "devDependencies": {
+      "nodemon": "^2.0.4"
+   }
+}

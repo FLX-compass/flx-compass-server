@@ -1,10 +1,16 @@
 const express = require('express');
 const dotenv = require('dotenv');
 
+// Route files
+const attractions = require('./routes/attractions');
+
 // Load envirement files
 dotenv.config({ path: './config/config.env' });
 
 const app = express();
+
+// Mount routers
+app.use('/api/v2/attractions', attractions);
 
 const PORT = process.env.PORT||5000;
 

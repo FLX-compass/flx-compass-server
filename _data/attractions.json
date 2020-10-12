@@ -1,0 +1,34 @@
+[
+   {
+      "_id": "5e3d8b46a721ee510e8427d9",
+      "name": "Abandon Brewing Company",
+      "description": "Placeholder for description",
+      "address": "2994 Merritt Hill Rd Penn Yan NY 14527",
+      "phone": "(585)208-9088",
+      "categories": [
+         "brewery"
+      ],
+      "checkIns": 50
+   },
+   {
+      "_id": "5e3d8b46a721ee510e8427da",
+      "name": "Anthony Road",
+      "description": "Placeholder for description",
+      "address": "1020 Anthony Road Penn Yan NY 14527",
+      "phone": "(315)536-2182",
+      "categories": [
+         "winery"
+      ],
+      "checkIns": 500
+   },
+   {
+      "_id": "5e3d8b46a721ee510e8427db",
+      "name": "Atwater Vineyards",
+      "description": "Placeholder for description",
+      "address": "5055 State Route 414 Burdett NY 14818",
+      "categories": [
+         "winery"
+      ],
+      "checkIns": 500
+   }
+]

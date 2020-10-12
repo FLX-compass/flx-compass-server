@@ -1,5 +1,11 @@
 const mongoose = require('mongoose');
 
+// Required fields
+// name
+// description
+// address
+// category
+
 const AttractionSchema = new mongoose.Schema({
    name: {
      type: String,

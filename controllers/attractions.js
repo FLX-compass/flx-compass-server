@@ -1,3 +1,5 @@
+const Attraction = require('../models/Attraction');
+
 // @desc    Get All Attractions
 // @route   GET /api/v2/attractions
 // @access  Public
@@ -15,8 +17,17 @@ exports.getAttraction = (req, res, next) => {
 // @desc    Create Attraction
 // @route   POST /api/v2/attractions
 // @access  Private
-exports.createAttraction = (req, res, next) => {
-   res.status(200).json({ success: true, data: "Create new attractions" });
+exports.createAttraction = async (req, res, next) => {
+   try {
+      const attraction = await Attraction.create(req.body);
+
+      res.status(201).json({
+         success: true,
+         data: attraction
+      });
+   } catch (err) {
+      res.status(400).json({success: false});
+   }
 }
 
 // @desc    Update Attraction

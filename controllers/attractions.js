@@ -1,3 +1,4 @@
+const { findByIdAndDelete, findByIdAndUpdate } = require('../models/Attraction');
 const Attraction = require('../models/Attraction');
 
 // @desc    Get All Attractions
@@ -6,7 +7,7 @@ const Attraction = require('../models/Attraction');
 exports.getAttractions = async (req, res, next) => {
    try {
       const attractions = await Attraction.find();
-      res.status(200).json({ success: true, data: attractions });
+      res.status(200).json({ success: true, count: attractions.length, data: attractions });
    } catch (err) {
       res.status(400).json({ success: false });
    }
@@ -46,13 +47,32 @@ exports.createAttraction = async (req, res, next) => {
 // @desc    Update Attraction
 // @route   PUT /api/v2/attractions/:id
 // @access  Private
-exports.updateAttraction = (req, res, next) => {
-   res.status(200).json({ success: true, data: `Update attraction ${req.params.id}` });
-}
+exports.updateAttraction = async (req, res, next) => {
+   try {
+      const attraction = await Attraction.findByIdAndUpdate(req.params.id, req.body, {
+         new: true,
+         runValidators: true
+      });
+      if(!attraction) {
+         return res.status(400).json({ success: false });
+      }
+      res.status(200).json({ success: true, data: attraction });   
+   } catch (err) {
+      res.status(400).json({ success: false });
+   }  
+};
 
 // @desc    Delete Attraction
 // @route   DELETE /api/v2/attractions/:id
 // @access  Private
-exports.deleteAttraction = (req, res, next) => {
-   res.status(200).json({ success: true, data: `Delete attraction ${req.params.id}` });
+exports.deleteAttraction = async (req, res, next) => {
+   try {
+      const attraction = await Attraction.findByIdAndDelete(req.params.id);
+      if(!attraction) {
+         return res.status(400).json({ success: false });
+      }
+      res.status(200).json({ success: true, data: {} });   
+   } catch (err) {
+      res.status(400).json({ success: false });
+   } 
 }

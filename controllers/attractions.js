@@ -1,4 +1,4 @@
-const { findByIdAndDelete, findByIdAndUpdate } = require('../models/Attraction');
+const ErrorResponse = require('../utils/errorResponse');
 const Attraction = require('../models/Attraction');
 
 // @desc    Get All Attractions
@@ -9,7 +9,7 @@ exports.getAttractions = async (req, res, next) => {
       const attractions = await Attraction.find();
       res.status(200).json({ success: true, count: attractions.length, data: attractions });
    } catch (err) {
-      res.status(400).json({ success: false });
+      next(err);
    }
 }
 
@@ -20,11 +20,11 @@ exports.getAttraction = async (req, res, next) => {
    try {
       const attraction = await Attraction.findById(req.params.id);
       if(!attraction) {
-         return res.status(400).json({ success: false });
+         return next(new ErrorResponse(`Attraction not found with ID of ${req.params.id}`, 404));
       }
       res.status(200).json({ success: true, data: attraction });
    } catch (err) {
-      res.status(400).json({ success: false });
+      next(err);
    }
 }
 
@@ -40,7 +40,7 @@ exports.createAttraction = async (req, res, next) => {
          data: attraction
       });
    } catch (err) {
-      res.status(400).json({success: false});
+      next(err);
    }
 }
 
@@ -54,11 +54,11 @@ exports.updateAttraction = async (req, res, next) => {
          runValidators: true
       });
       if(!attraction) {
-         return res.status(400).json({ success: false });
+         return next(new ErrorResponse(`Attraction not found with ID of ${req.params.id}`, 404));
       }
       res.status(200).json({ success: true, data: attraction });   
    } catch (err) {
-      res.status(400).json({ success: false });
+      next(err);
    }  
 };
 
@@ -69,10 +69,10 @@ exports.deleteAttraction = async (req, res, next) => {
    try {
       const attraction = await Attraction.findByIdAndDelete(req.params.id);
       if(!attraction) {
-         return res.status(400).json({ success: false });
+         return next(new ErrorResponse(`Attraction not found with ID of ${req.params.id}`, 404));
       }
       res.status(200).json({ success: true, data: {} });   
    } catch (err) {
-      res.status(400).json({ success: false });
+      next(err);
    } 
 }

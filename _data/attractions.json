@@ -183,7 +183,7 @@
       "name": "Naked Dove Brewing Company",
       "address": "4048 State Route 5 and 20 Canandaigua New York 14424-9591",
       "categories": "brewery",
-      "lake": "Canadaigua Lake"
+      "lake": "Canandaigua Lake"
    },
    {
       "name": "Young Lion Brewing",
@@ -237,7 +237,8 @@
       "name": "Ithaca Beer Company",
       "address": "122 Ithaca Beer Drive Ithaca New York 14850-8745",
       "categories": "brewery",
-      "lake": "Cayuga Lake"
+      "lake": "Cayuga Lake",
+      "viewCount": 1000
    },
    {
       "name": "Liquid State Brewing Company",
@@ -249,13 +250,15 @@
       "name": "Abandon Brewing Company",
       "address": "2994 Merritt Hill Road Penn Yan New York 14527",
       "categories": "brewery",
-      "lake": "Keuka Lake"
+      "lake": "Keuka Lake",
+      "viewCount": 1100
    },
    {
       "name": "Brewery of Broken Dreams",
       "address": "8319 Pleasant Valley Road Hammondsport New York 14840",
       "categories": "brewery",
-      "lake": "Keuka Lake"
+      "lake": "Keuka Lake",
+      "viewCount": 400
    },
    {
       "name": "Finger Lakes Beer Company",
@@ -309,13 +312,15 @@
       "name": "Lucky Hare Brewing Company",
       "address": "6085 Beckhorn Road Hector New York 14841",
       "categories": "brewery",
-      "lake": "Seneca Lake"
+      "lake": "Seneca Lake",
+      "viewCount": 1200
    },
    {
       "name": "Rooster Fish Brewing",
       "address": "111 North Franklin Street Watkins Glen New York 14891",
       "categories": "brewery",
-      "lake": "Seneca Lake"
+      "lake": "Seneca Lake",
+      "viewCount": 500
    },
    {
       "name": "Starkey's Lookout / G. C. Starkey Beer Company",

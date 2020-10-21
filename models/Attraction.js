@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 const slugify = require('slugify');
 const geocoder = require('../utils/geocoder');
 
-// Required fields
+// REQUIRED FIELDS
 // name
 // address
 // lake
 // category
-// REQUIRED TO ADD
-// likes - 
-// views - 
+// likedCount
+// bookmarkedCount
+// viewCount
 // sponsored - bool
 // family - bool
 
@@ -73,9 +73,9 @@ const AttractionSchema = new mongoose.Schema({
        'brewery',
        'distillery',
        'farm',
-       'parks & trails',
+       'parks-trails',
        'museum',
-       'sports & games',
+       'sports-games',
        'restaurant',
        'shopping'
      ]
@@ -90,7 +90,7 @@ const AttractionSchema = new mongoose.Schema({
          'Cayuga Lake',
          'Seneca Lake',
          'Keuka Lake',
-         'Canadaigua Lake',
+         'Canandaigua Lake',
          'Honeoye',
          'Candice',
          'Hemlock',

@@ -8,7 +8,16 @@ const Attraction = require('../models/Attraction');
 // @route   GET /api/v2/attractions
 // @access  Public
 exports.getAttractions = asyncHandler(async (req, res, next) => {
-      const attractions = await Attraction.find();
+      let query;
+
+      let queryStr = JSON.stringify(req.query);
+
+      queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
+
+      query = Attraction.find(JSON.parse(queryStr));
+
+      const attractions = await query;
+      
       res
          .status(200)
          .json({ success: true, count: attractions.length, data: attractions });

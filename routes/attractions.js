@@ -4,10 +4,14 @@ const {
    getAttraction,
    createAttraction,
    updateAttraction,
-   deleteAttraction
+   deleteAttraction,
+   getAttractionsInRadius
 } = require('../controllers/attractions');
 
 const router = express.Router();
+
+router.route('/radius/:zipcode/:distance')
+   .get(getAttractionsInRadius);
 
 router
    .route('/')

@@ -4,8 +4,8 @@ const geocoder = require('../utils/geocoder');
 
 // Required fields
 // name
-// description
 // address
+// lake
 // category
 
 const AttractionSchema = new mongoose.Schema({
@@ -19,7 +19,6 @@ const AttractionSchema = new mongoose.Schema({
    slug: String,
    description: {
      type: String,
-     required: [true, 'Please add a description'],
      maxlength: [1000, 'Description cannot be more than 1,000 characters.']
    },
    website: {
@@ -78,14 +77,15 @@ const AttractionSchema = new mongoose.Schema({
    },
    lake: {
       type: String,
+      required: true,
       enum: [
          'Otisco',
          'Skanateles',
          'Owasco',
-         'Cayuga',
-         'Seneca',
-         'Keuka',
-         'Canadaigua',
+         'Cayuga Lake',
+         'Seneca Lake',
+         'Keuka Lake',
+         'Canadaigua Lake',
          'Honeoye',
          'Candice',
          'Hemlock',

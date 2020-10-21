@@ -1,26 +1,350 @@
 [
    {
+      "name": "Bet the Farm Winery",
+      "address": "381 Main Street, Aurora, NY 13026",
+      "categories": "winery",
+      "lake": "Cayuga Lake"
+   },
+   {
+      "name": "Bright Leaf Vineyard",
+      "address": "1250 Clearview Road, King Ferry, NY 13081",
+      "categories": "winery",
+      "lake": "Cayuga Lake"
+   },
+   {
+      "name": "Buttonwood Grove",
+      "address": "5986 New York 89 Romulus, NY 14541",
+      "categories": "winery",
+      "lake": "Cayuga Lake"
+   },
+   {
+      "name": "Hosmer Winery",
+      "address": "6999 New York 89 Ovid, NY 14521",
+      "categories": "winery",
+      "lake": "Cayuga Lake"
+   },
+   {
+      "name": "Knapp Vineyards Winery & Restaurant",
+      "address": "2770 Ernsberger Road Romulus, NY 14541",
+      "categories": "winery",
+      "lake": "Cayuga Lake"
+   },
+   {
+      "name": "Sheldrake Point Winery",
+      "address": "7448 County Road #153 Ovid, NY 14521",
+      "categories": "winery",
+      "lake": "Cayuga Lake"
+   },
+   {
+      "name": "Swedish Hill Winery",
+      "address": "4565 State Route 414 Romulus, NY 14541",
+      "categories": "winery",
+      "lake": "Cayuga Lake"
+   },
+   {
+      "name": "Thirsty Owl Wine Company",
+      "address": "6861 Route 89 Ovid, New York 14521",
+      "categories": "winery",
+      "lake": "Cayuga Lake"
+   },
+   {
+      "name": "Dr. Konstantin Frank Winery",
+      "address": "9749 Middle Road Hammondsport, NY 14840",
+      "categories": "winery",
+      "lake": "Keuka Lake"
+   },
+   {
+      "name": "Heron Hill Winery",
+      "address": "9301 County Road 76 Hammondsport, NY 14840",
+      "categories": "winery",
+      "lake": "Keuka Lake"
+   },
+   {
+      "name": "Hunt Country Vineyards",
+      "address": "4021 Italy Hill Road, Branchport, NY 14418",
+      "categories": "winery",
+      "lake": "Keuka Lake"
+   },
+   {
+      "name": "Keuka Springs Vineyards",
+      "address": "243 New York 54 Penn Yan, NY 14527",
+      "categories": "winery",
+      "lake": "Keuka Lake"
+   },
+   {
+      "name": "Weis Vineyards",
+      "address": "10014 Day Road, Hammondsport, NY  14840",
+      "categories": "winery",
+      "lake": "Keuka Lake"
+   },
+   {
+      "name": "Anthony Road Wine Company",
+      "address": "1020 Anthony Rd, Penn Yan, NY 14527",
+      "categories": "winery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Atwater Estate Vineyards",
+      "address": "5055 New York 414 Burdett, NY 14818",
+      "categories": "winery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Barnstormer Winery",
+      "address": "4184 NY 14, Rock Stream, NY 14878",
+      "categories": "winery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Billsboro Winery",
+      "address": "4760 West Lake Road Geneva, NY 14456",
+      "categories": "winery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Boundary Breaks Winery",
+      "address": "1568 Porter Covert Road Lodi, NY 14860",
+      "categories": "winery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Fox Run Vineyards",
+      "address": "670 State Route 14 Penn Yan, NY 14527",
+      "categories": "winery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Fulkerson Winery",
+      "address": "5576 New York 14 Dundee, NY 14837",
+      "categories": "winery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Glenora Wine Cellars",
+      "address": "5435 New York 14 Dundee, NY 14837",
+      "categories": "winery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Lakewood Vineyards",
+      "address": "4024 New York 14 Watkins Glen, NY 14891",
+      "categories": "winery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Lamoreaux Landing Wine Cellars",
+      "address": "9224 NY-414 Lodi, NY 14860",
+      "categories": "winery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Red Newt Wine Cellars",
+      "address": "3675 Tichenor Road Hector, NY 14841",
+      "categories": "winery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Seneca Shore Wine Cellars",
+      "address": "929 Davy Road Penn Yan, NY 14527",
+      "categories": "winery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Silver Thread Vineyard",
+      "address": "1401 Caywood Road Lodi, NY 14860",
+      "categories": "winery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Three Brothers Wineries and Estates",
+      "address": "623 Lerch Road Geneva, NY 14456",
+      "categories": "winery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Ventosa Vineyards",
+      "address": "3440 New York 96A Geneva, NY 14456",
+      "categories": "winery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Wagner Vineyards",
+      "address": "9322 New York 414 Lodi, NY 14860",
+      "categories": "winery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Zugibe Vineyards",
+      "address": "4248 East Lake Road Geneva, NY 14456",
+      "categories": "winery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Naked Dove Brewing Company",
+      "address": "4048 State Route 5 and 20 Canandaigua New York 14424-9591",
+      "categories": "brewery",
+      "lake": "Canadaigua Lake"
+   },
+   {
+      "name": "Young Lion Brewing",
+      "address": "24 Lake Shore Drive Canandaigua New York 14424",
+      "categories": "brewery",
+      "lake": "Canandaigua Lake"
+   },
+   {
+      "name": "Aurora Ale & Lager Co.",
+      "address": "1891 State Route 90 North King Ferry New York 13081",
+      "categories": "brewery",
+      "lake": "Cayuga Lake"
+   },
+   {
+      "name": "Bacchus Brewing Company",
+      "address": "15 Ellis Drive Dryden New York 13053",
+      "categories": "brewery",
+      "lake": "Cayuga Lake"
+   },
+   {
+      "name": "Bacchus Brewing Taproom & Beer Garden",
+      "address": "Americana Vineyards 4367 East Covert Road Interlaken New York 14847",
+      "categories": "brewery",
+      "lake": "Cayuga Lake"
+   },
+   {
+      "name": "Bandwagon Farm and Brewery",
+      "address": "3582 West Avenue Interlaken New York 14847",
+      "categories": "brewery",
+      "lake": "Cayuga Lake"
+   },
+   {
+      "name": "Boathouse Beer Garden & Brewing Co.",
+      "address": "6128 State Route 89 Romulus New York 14541",
+      "categories": "brewery",
+      "lake": "Cayuga Lake"
+   },
+   {
+      "name": "Felicia’s Atomic Brewhouse and Bakery",
+      "address": "45 E Main St Trumansburg New York 14886",
+      "categories": "brewery",
+      "lake": "Cayuga Lake"
+   },
+   {
+      "name": "Fleur De Lis Brew Works",
+      "address": "3630 State Route 414  Seneca Falls New York 13148",
+      "categories": "brewery",
+      "lake": "Cayuga Lake"
+   },
+   {
+      "name": "Ithaca Beer Company",
+      "address": "122 Ithaca Beer Drive Ithaca New York 14850-8745",
+      "categories": "brewery",
+      "lake": "Cayuga Lake"
+   },
+   {
+      "name": "Liquid State Brewing Company",
+      "address": "620 W Green St Ithaca New York 14850",
+      "categories": "brewery",
+      "lake": "Cayuga Lake"
+   },
+   {
       "name": "Abandon Brewing Company",
-      "description": "Placeholder for description",
-      "address": "2994 Merritt Hill Rd Penn Yan NY 14527",
-      "categories": [
-         "brewery"
-      ]
+      "address": "2994 Merritt Hill Road Penn Yan New York 14527",
+      "categories": "brewery",
+      "lake": "Keuka Lake"
    },
    {
-      "name": "Anthony Road",
-      "description": "Placeholder for description",
-      "address": "1020 Anthony Road Penn Yan NY 14527",
-      "categories": [
-         "winery"
-      ]
+      "name": "Brewery of Broken Dreams",
+      "address": "8319 Pleasant Valley Road Hammondsport New York 14840",
+      "categories": "brewery",
+      "lake": "Keuka Lake"
    },
    {
-      "name": "Atwater Vineyards",
-      "description": "Placeholder for description",
-      "address": "5055 State Route 414 Burdett NY 14818",
-      "categories": [
-         "winery"
-      ]
+      "name": "Finger Lakes Beer Company",
+      "address": "8462 State Route 54 Hammondsport New York 14840",
+      "categories": "brewery",
+      "lake": "Keuka Lake"
+   },
+   {
+      "name": "Keg & Barrel Brewing Co.",
+      "address": "14720 State Route 54  Dundee New York 14837",
+      "categories": "brewery",
+      "lake": "Keuka Lake"
+   },
+   {
+      "name": "Keuka Brewing Company",
+      "address": "8572 Briglin Road Hammondsport New York 14840",
+      "categories": "brewery",
+      "lake": "Keuka Lake"
+   },
+   {
+      "name": "Bottomless Brewing",
+      "address": "3543 East Lake Road Geneva New York 14456",
+      "categories": "brewery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Climbing Bines Craft Ale Co.",
+      "address": "511 Hansen Point Penn Yan New York 14527",
+      "categories": "brewery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Grist Iron Brewing Company",
+      "address": "4874 State Route 414 Burdett New York 14818",
+      "categories": "brewery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Lake Drum Brewing",
+      "address": "16 East Castle Street Geneva New York 14456",
+      "categories": "brewery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Lost Kingdom Brewery",
+      "address": "7160 Main Street Ovid New York 14521",
+      "categories": "brewery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Lucky Hare Brewing Company",
+      "address": "6085 Beckhorn Road Hector New York 14841",
+      "categories": "brewery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Rooster Fish Brewing",
+      "address": "111 North Franklin Street Watkins Glen New York 14891",
+      "categories": "brewery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Starkey's Lookout / G. C. Starkey Beer Company",
+      "address": "5428 State Route 14 Dundee New York 14837",
+      "categories": "brewery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Two Goats Brewing",
+      "address": "5027 State Route 414 Hector New York 14818-9816",
+      "categories": "brewery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "Wagner Valley Brewing Company",
+      "address": "9322 State Route 414 Lodi New York 14860",
+      "categories": "brewery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "War Horse Brewing Company",
+      "address": "623 Lerch Road Geneva New York 14456",
+      "categories": "brewery",
+      "lake": "Seneca Lake"
+   },
+   {
+      "name": "WeBe Brewing Company",
+      "address": "796 Pre Emption Road  Geneva New York 14456",
+      "categories": "brewery",
+      "lake": "Seneca Lake"
    }
 ]

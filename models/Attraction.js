@@ -7,6 +7,11 @@ const geocoder = require('../utils/geocoder');
 // address
 // lake
 // category
+// REQUIRED TO ADD
+// likes - 
+// views - 
+// sponsored - bool
+// family - bool
 
 const AttractionSchema = new mongoose.Schema({
    name: {
@@ -92,7 +97,6 @@ const AttractionSchema = new mongoose.Schema({
          'Conesus'
       ]
    },
-   averageRating: Number,
    averageCost: Number,
    photo: {
      type: String,
@@ -101,6 +105,10 @@ const AttractionSchema = new mongoose.Schema({
    compassMember: {
      type: Boolean,
      default: false
+   },
+   sponsored: {
+      type: Boolean,
+      default: false
    },
    createdAt: {
      type: Date,
@@ -117,6 +125,10 @@ const AttractionSchema = new mongoose.Schema({
    likedCount: {
      type: Number,
      default: 0
+   },
+   family: {
+      type: Boolean,
+      default: false
    }
  }
 );

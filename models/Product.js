@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 // REQUIRED FIELDS
 // productName
 // category (wine, beer, liquor, apparel, merchandise, gifts)
+// attraction
 
 const ProductSchema = new mongoose.Schema({
    productName: {

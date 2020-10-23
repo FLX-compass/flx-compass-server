@@ -14,7 +14,7 @@ exports.getAttractions = asyncHandler(async (req, res, next) => {
       const reqQuery = { ...req.query };
 
       // Fields to exclude
-      const removeFields = ['select', 'sort'];
+      const removeFields = ['select', 'sort', 'page', 'limit'];
 
       // Loop over removeFields and remove from reqQuery
       removeFields.forEach(param => delete reqQuery[param]);
@@ -42,12 +42,38 @@ exports.getAttractions = asyncHandler(async (req, res, next) => {
          query = query.sort('name');
       }
 
+      // Pagination, set page default and limit default after ||
+      const page = parseInt(req.query.page, 10) || 1;
+      const limit = parseInt(req.query.limit, 10) || 25;
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit; 
+      const total = await Attraction.countDocuments();
+
+      query = query.skip(startIndex).limit(limit);
+
       // Executing query
       const attractions = await query;
 
+      // Pagination result
+      const pagination = {};
+
+      if(endIndex < total) {
+         pagination.next = {
+            page: page + 1,
+            limit
+         }
+      }
+
+      if(startIndex > 0) {
+         pagination.prev = {
+            page: page - 1,
+            limit
+         }
+      }
+
       res
          .status(200)
-         .json({ success: true, count: attractions.length, data: attractions });
+         .json({ success: true, count: attractions.length, pagination, data: attractions });
 });
 
 // @desc    Get Single Attraction

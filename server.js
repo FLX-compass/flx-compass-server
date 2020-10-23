@@ -7,6 +7,7 @@ const connectDb = require('./config/db');
 
 // Route files
 const attractions = require('./routes/attractions');
+const products = require('./routes/products');
 
 // Load envirement files
 dotenv.config({ path: './config/config.env' });
@@ -26,6 +27,7 @@ if(process.env.NODE_ENV === 'development') {
 
 // Mount routers
 app.use('/api/v2/attractions', attractions);
+app.use('/api/v2/products', products);
 
 app.use(errorHandler);
 

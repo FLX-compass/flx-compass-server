@@ -64,7 +64,7 @@ const AttractionSchema = new mongoose.Schema({
       zipcode: String,
       country: String
     },
-   categories: {
+   category: {
      // Array of strings
      type: [String],
      required: true,
@@ -87,10 +87,10 @@ const AttractionSchema = new mongoose.Schema({
          'Otisco',
          'Skanateles',
          'Owasco',
-         'Cayuga Lake',
-         'Seneca Lake',
-         'Keuka Lake',
-         'Canandaigua Lake',
+         'Cayuga',
+         'Seneca',
+         'Keuka',
+         'Canandaigua',
          'Honeoye',
          'Candice',
          'Hemlock',

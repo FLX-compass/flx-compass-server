@@ -8,7 +8,13 @@ const {
    getAttractionsInRadius
 } = require('../controllers/attractions');
 
+// Include other resource routers
+const productRouter = require('./products');
+
 const router = express.Router();
+
+// Re-route into other resource routers
+router.use('/:attractionId/products', productRouter);
 
 router.route('/radius/:zipcode/:distance')
    .get(getAttractionsInRadius);

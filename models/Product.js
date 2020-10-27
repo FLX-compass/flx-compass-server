@@ -30,7 +30,8 @@ const ProductSchema = new mongoose.Schema({
       type: mongoose.Schema.ObjectId,
       ref: 'Attraction',
       required: true
-   }
+   },
+   brand: String
 });
 
 module.exports = mongoose.model('Product', ProductSchema);

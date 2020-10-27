@@ -26,7 +26,7 @@ exports.getAttractions = asyncHandler(async (req, res, next) => {
       queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 
       // Finding resource
-      query = Attraction.find(JSON.parse(queryStr));
+      query = Attraction.find(JSON.parse(queryStr)).populate('products');
 
       // SELECT FIELDS
       if(req.query.select) {
@@ -121,10 +121,11 @@ exports.updateAttraction = asyncHandler(async (req, res, next) => {
 // @route   DELETE /api/v2/attractions/:id
 // @access  Private
 exports.deleteAttraction = asyncHandler(async (req, res, next) => {
-      const attraction = await Attraction.findByIdAndDelete(req.params.id);
+      const attraction = await Attraction.findById(req.params.id);
       if(!attraction) {
          return next(new ErrorResponse(`Attraction not found with ID of ${req.params.id}`, 404));
       }
+      attraction.remove();
       res
          .status(200)
          .json({ success: true, data: {} });   

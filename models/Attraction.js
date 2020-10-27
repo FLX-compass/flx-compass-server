@@ -130,6 +130,10 @@ const AttractionSchema = new mongoose.Schema({
       type: Boolean,
       default: false
    }
+ },
+ {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
  }
 );
 
@@ -157,6 +161,21 @@ AttractionSchema.pre('save', async function(next) {
 
    this.address = undefined
    next();
+});
+
+// Cascade delete products when Attraction is deleted
+AttractionSchema.pre('remove', async function (next) {
+   console.log(`Products being removed from attraction ${this._id}`);
+   await this.model('Product').deleteMany({ attraction: this._id });
+   next();
+})
+
+// Reverse populate with virtuals
+AttractionSchema.virtual('products', {
+   ref: 'Product',
+   localField: '_id',
+   foreignField: 'attraction',
+   justOne: false
 })
  
 module.exports = mongoose.model('Attraction', AttractionSchema);

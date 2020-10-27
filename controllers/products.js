@@ -12,7 +12,10 @@ exports.getProducts = asyncHandler(async (req, res, next) => {
    if(req.params.attractionId) {
       query = Product.find({ attraction: req.params.attractionId });
    } else {
-      query = Product.find();
+      query = Product.find().populate({
+         path: 'attraction',
+         select: 'name slug'
+      });
    }
 
    const products = await query;

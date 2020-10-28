@@ -23,15 +23,15 @@ const attractions = JSON.parse(
    fs.readFileSync(`${__dirname}/_data/attractions.json`, 'utf-8')
 );
 
-// const products = JSON.parse(
-//   fs.readFileSync(`${__dirname}/_data/products.json`, 'utf-8')
-//);
+const products = JSON.parse(
+   fs.readFileSync(`${__dirname}/_data/products.json`, 'utf-8')
+);
 
 // Import JSON data into Database
 const importData = async () => {
    try {
       await Attraction.create(attractions);
-      // await Product.create(products);
+      await Product.create(products);
 
       console.log('Data imported...'.green.inverse);
       process.exit();

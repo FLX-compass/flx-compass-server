@@ -40,7 +40,6 @@ const ProductSchema = new mongoose.Schema({
 
 // Static method to get average price
 ProductSchema.statics.getAvgCost = async function(attractionId) {
-   console.log('Calculating avg cost...'.blue);
    const obj = await this.aggregate([
       {
          $match: { attraction: attractionId }

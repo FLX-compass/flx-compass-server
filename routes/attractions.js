@@ -5,7 +5,8 @@ const {
    createAttraction,
    updateAttraction,
    deleteAttraction,
-   getAttractionsInRadius
+   getAttractionsInRadius,
+   attractionPhotoUpload
 } = require('../controllers/attractions');
 
 // Include other resource routers
@@ -18,6 +19,10 @@ router.use('/:attractionId/products', productRouter);
 
 router.route('/radius/:zipcode/:distance')
    .get(getAttractionsInRadius);
+
+router
+   .route('/:id/photos')
+   .put(attractionPhotoUpload);
 
 router
    .route('/')

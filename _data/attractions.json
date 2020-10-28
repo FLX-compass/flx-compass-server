@@ -252,6 +252,13 @@
       "lake": "Keuka"
    },
    {
+      "_id": "5f982d5c559aaa35d5e88600",
+      "name": "Kemmeter Wines",
+      "address": "1030 Larzelere Road, Penn Yan NY 14527",
+      "category": "winery",
+      "lake": "Seneca"
+   },
+   {
       "_id": "5f982d5c559aaa35d5e88605",
       "name": "Keuka Brewing Company",
       "address": "8572 Briglin Road Hammondsport New York 14840",

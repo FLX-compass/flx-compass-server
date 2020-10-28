@@ -8,24 +8,17 @@ const Attraction = require('../models/Attraction');
 // @route   GET /api/v2/attractions/products
 // @access  Public
 exports.getProducts = asyncHandler(async (req, res, next) => {
-   let query;
-
    if(req.params.attractionId) {
-      query = Product.find({ attraction: req.params.attractionId });
+      const products = await Product.find({ attraction: req.params.attractionId });
+
+      return res.status(200).json({
+         success: true,
+         count: products.length,
+         data: products
+      })
    } else {
-      query = Product.find().populate({
-         path: 'attraction',
-         select: 'name slug'
-      });
+      res.status(200).json(res.advancedResults);
    }
-
-   const products = await query;
-
-   res.status(200).json({
-      success: true,
-      count: products.length,
-      data: products
-   });
 });
 
 // @desc    Get Single Product

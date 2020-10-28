@@ -7,11 +7,17 @@ const {
    deleteProduct
 } = require('../controllers/products');
 
+const Product = require('../models/Product');
+const advancedResults = require('../middleware/advancedResults');
+
 const router = express.Router({ mergeParams: true });
 
 router
    .route('/')
-   .get(getProducts)
+   .get(advancedResults(Product, {
+      path: 'attraction',
+      select: 'name slug'
+   }), getProducts)
    .post(addProduct);
 
 router

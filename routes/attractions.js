@@ -9,6 +9,11 @@ const {
    attractionPhotoUpload
 } = require('../controllers/attractions');
 
+const Attraction = require('../models/Attraction');
+
+// Takes in the model and any populate
+const advancedResults = require('../middleware/advancedResults');
+
 // Include other resource routers
 const productRouter = require('./products');
 
@@ -26,7 +31,7 @@ router
 
 router
    .route('/')
-   .get(getAttractions)
+   .get(advancedResults(Attraction, 'products'), getAttractions)
    .post(createAttraction);
 
 router

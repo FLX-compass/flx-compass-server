@@ -6,3 +6,6 @@ The FLXcompass.com API has the most comprehensive list of wineries, breweries, a
 ## Collections
 The database collections:
 - Attractions
+
+## Notes
+JWT secret is password for https://jwt.io/

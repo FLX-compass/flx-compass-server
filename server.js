@@ -10,6 +10,7 @@ const fileupload = require('express-fileupload');
 // Route files
 const attractions = require('./routes/attractions');
 const products = require('./routes/products');
+const auth = require('./routes/auth');
 
 // Load envirement files
 dotenv.config({ path: './config/config.env' });
@@ -36,6 +37,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 // Mount routers
 app.use('/api/v2/attractions', attractions);
 app.use('/api/v2/products', products);
+app.use('/api/v2/auth', auth);
 
 app.use(errorHandler);
 

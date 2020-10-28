@@ -2,7 +2,9 @@ const express = require('express');
 const {
    getProducts,
    getProduct,
-   addProduct
+   addProduct,
+   updateProduct,
+   deleteProduct
 } = require('../controllers/products');
 
 const router = express.Router({ mergeParams: true });
@@ -14,6 +16,8 @@ router
 
 router
    .route('/:id')
-   .get(getProduct);
+   .get(getProduct)
+   .put(updateProduct)
+   .delete(deleteProduct);
 
 module.exports = router;

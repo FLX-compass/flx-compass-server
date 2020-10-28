@@ -57,7 +57,7 @@ exports.addProduct = asyncHandler(async (req, res, next) => {
    if(!attraction) {
       return next(
          new ErrorResponse(`No attraction with an ID of ${req.body.attractionId}`, 
-         488)
+         404)
       );
    }
 
@@ -66,5 +66,50 @@ exports.addProduct = asyncHandler(async (req, res, next) => {
    res.status(200).json({
       success: true,
       data: product
+   });
+});
+
+// @desc    Update Product
+// @route   PUT /api/v2/products/:id
+// @access  Private
+exports.updateProduct = asyncHandler(async (req, res, next) => {
+   let product = await Product.findById(req.params.id);
+
+   if(!product) {
+      return next(
+         new ErrorResponse(`No product with an ID of ${req.body.id}`, 
+         400)
+      );
+   }
+
+   product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true
+   });
+
+   res.status(200).json({
+      success: true,
+      data: product
+   });
+});
+
+// @desc    Delete Product
+// @route   DELETE /api/v2/products/:id
+// @access  Private
+exports.deleteProduct = asyncHandler(async (req, res, next) => {
+   const product = await Product.findById(req.params.id);
+
+   if(!product) {
+      return next(
+         new ErrorResponse(`No product with an ID of ${req.body.id}`, 
+         404)
+      );
+   }
+
+   await product.remove();
+
+   res.status(200).json({
+      success: true,
+      data: []
    });
 });

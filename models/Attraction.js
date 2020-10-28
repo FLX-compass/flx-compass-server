@@ -97,7 +97,7 @@ const AttractionSchema = new mongoose.Schema({
          'Conesus'
       ]
    },
-   averageCost: Number,
+   avgCost: Number,
    photo: {
      type: String,
      default: 'no-photo.jpg'

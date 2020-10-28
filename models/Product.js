@@ -31,7 +31,45 @@ const ProductSchema = new mongoose.Schema({
       ref: 'Attraction',
       required: true
    },
+   price: {
+      type: Number,
+      default: 0
+   },
    brand: String
 });
+
+// Static method to get average price
+ProductSchema.statics.getAvgCost = async function(attractionId) {
+   console.log('Calculating avg cost...'.blue);
+   const obj = await this.aggregate([
+      {
+         $match: { attraction: attractionId }
+      },
+      {
+         $group: {
+            _id: '$attraction',
+            avgCost: { $avg: '$price' }
+         }
+      }
+   ]);
+   try {
+      await this.model('Attraction').findByIdAndUpdate(attractionId, {
+         avgCost: obj[0].avgCost.toFixed(2)
+      })
+   } catch (err) {
+      
+   }
+}
+
+// Call getAvgCost after save
+ProductSchema.post('save', function(){
+   this.constructor.getAvgCost(this.attraction);
+});
+
+// Call getAvgCost before remove
+ProductSchema.pre('remove', function(){
+   this.constructor.getAvgCost(this.attraction);
+});
+
 
 module.exports = mongoose.model('Product', ProductSchema);

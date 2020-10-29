@@ -19,6 +19,8 @@ const productRouter = require('./products');
 
 const router = express.Router();
 
+const { protect } = require('../middleware/auth');
+
 // Re-route into other resource routers
 router.use('/:attractionId/products', productRouter);
 
@@ -27,17 +29,17 @@ router.route('/radius/:zipcode/:distance')
 
 router
    .route('/:id/photos')
-   .put(attractionPhotoUpload);
+   .put(protect, attractionPhotoUpload);
 
 router
    .route('/')
    .get(advancedResults(Attraction, 'products'), getAttractions)
-   .post(createAttraction);
+   .post(protect, createAttraction);
 
 router
    .route('/:id')
    .get(getAttraction)
-   .put(updateAttraction)
-   .delete(deleteAttraction);
+   .put(protect, updateAttraction)
+   .delete(protect, deleteAttraction);
 
 module.exports = router;

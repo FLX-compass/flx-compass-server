@@ -1,0 +1,44 @@
+[
+   {
+      "_id": "5f9a01dc1174c3333ad08154",
+      "role": "publisher",
+      "name": "John James",
+      "email": "john@gmail.com",
+      "password": "abc123"
+   },
+   {
+      "_id": "5f9ad60612e13f63b848d13d",
+      "role": "publisher",
+      "name": "Johannes Reinhardt",
+      "email": "kemmeterwines@gmail.com",
+      "password": "abc123"
+   },
+   {
+      "_id": "5f9ad64912e13f63b848d13e",
+      "role": "user",
+      "name": "Jason Bunnell",
+      "email": "jason.bunnell@gmail.com",
+      "password": "abc123"
+   },
+   {
+      "_id": "5f9c1959dc53154f7687a816",
+      "role": "user",
+      "name": "David Doggins",
+      "email": "david@gmail.com",
+      "password": "abc123"
+   },
+   {
+      "_id": "5f9c1959dc53154f7687a818",
+      "role": "publisher",
+      "name": "Dean Jones",
+      "email": "deanjones719@gmail.com",
+      "password": "abc123"
+   },
+   {
+      "_id": "5f9c1959dc53154f7687a819",
+      "role": "user",
+      "name": "Max Henry",
+      "email": "maxhbl@gmail.com",
+      "password": "abc123"
+   }
+]

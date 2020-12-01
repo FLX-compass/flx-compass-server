@@ -129,6 +129,12 @@ const AttractionSchema = new mongoose.Schema({
    family: {
       type: Boolean,
       default: false
+   },
+   user: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+      required: true,
+      default: "5f9ad64912e13f63b848d13e"
    }
  },
  {

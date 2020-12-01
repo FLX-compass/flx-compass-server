@@ -29,12 +29,23 @@ exports.getAttraction = asyncHandler(async (req, res, next) => {
 // @route   POST /api/v2/attractions
 // @access  Private
 exports.createAttraction = asyncHandler(async (req, res, next) => {
-      const attraction = await Attraction.create(req.body);
+   // Add user to req.body
+   req.body.user = req.user.id;
 
-      res.status(201).json({
-         success: true,
-         data: attraction
-      });
+   // Check for published Attraction
+   const publishedAttraction = await Attraction.findOne({ user: req.user.id });
+
+   // if user is not admin, can only create one Attraction
+   if(publishedAttraction && req.user.role !== 'admin') {
+      return next(new ErrorResponse(`The user with ID ${req.user.id} has already published one Attraction`, 400));
+   }
+
+   const attraction = await Attraction.create(req.body);
+
+   res.status(201).json({
+      success: true,
+      data: attraction
+   });
 });
 
 // @desc    Update Attraction

@@ -45,13 +45,21 @@ exports.getProduct = asyncHandler(async (req, res, next) => {
 // @access  Private
 exports.addProduct = asyncHandler(async (req, res, next) => {
    req.body.attraction = req.params.attractionId;
+   req.body.user = req.user.id;
+
    const attraction = await Attraction.findById(req.params.attractionId);
 
+   // Does Attraction exist?
    if(!attraction) {
       return next(
          new ErrorResponse(`No attraction with an ID of ${req.body.attractionId}`, 
          404)
       );
+   }
+
+   // Make sure user has proper permissions to Create Product
+   if(attraction.user.toString() !== req.user.id && req.user.role !== 'admin'){
+      return next(new ErrorResponse(`User ${req.user.id} is not authorized to add product to attraction ${attraction.id}`, 404));
    }
 
    const product = await Product.create(req.body);
@@ -68,11 +76,17 @@ exports.addProduct = asyncHandler(async (req, res, next) => {
 exports.updateProduct = asyncHandler(async (req, res, next) => {
    let product = await Product.findById(req.params.id);
 
+   // Check for product
    if(!product) {
       return next(
          new ErrorResponse(`No product with an ID of ${req.body.id}`, 
          400)
       );
+   }
+
+   // Make sure user has proper permissions to Update Product
+   if(product.user.toString() !== req.user.id && req.user.role !== 'admin'){
+      return next(new ErrorResponse(`User ${req.user.id} is not authorized to update product ${product.id}`, 404));
    }
 
    product = await Product.findByIdAndUpdate(req.params.id, req.body, {
@@ -92,11 +106,17 @@ exports.updateProduct = asyncHandler(async (req, res, next) => {
 exports.deleteProduct = asyncHandler(async (req, res, next) => {
    const product = await Product.findById(req.params.id);
 
+   // Check to see Product exists
    if(!product) {
       return next(
          new ErrorResponse(`No product with an ID of ${req.body.id}`, 
          404)
       );
+   }
+
+   // Make sure user has proper permissions to Update Product
+   if(product.user.toString() !== req.user.id && req.user.role !== 'admin'){
+      return next(new ErrorResponse(`User ${req.user.id} is not authorized to delete product ${product.id}`, 404));
    }
 
    await product.remove();

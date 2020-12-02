@@ -133,6 +133,11 @@ exports.attractionPhotoUpload = asyncHandler(async (req, res, next) => {
    if(!attraction) {
       return next(new ErrorResponse(`Attraction not found with ID of ${req.params.id}`, 404));
    }
+
+   // Make sure user has proper permissions
+   if(attraction.user.toString() !== req.user.id && req.user.role !== 'admin'){
+      return next(new ErrorResponse(`User ${req.user.id} is not authorized to add a photo to this attraction`, 404));
+   }
    
    if(!req.files) {
       return next(

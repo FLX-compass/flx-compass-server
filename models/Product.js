@@ -35,7 +35,13 @@ const ProductSchema = new mongoose.Schema({
       type: Number,
       default: 0
    },
-   brand: String
+   brand: String,
+   user: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+      required: true,
+      default: "5f9ad64912e13f63b848d13e"
+   }
 });
 
 // Static method to get average price

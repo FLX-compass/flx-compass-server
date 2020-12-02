@@ -3,6 +3,7 @@ const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const geocoder = require('../utils/geocoder');
 const Attraction = require('../models/Attraction');
+const { truncate } = require('fs');
 
 
 // @desc    Get All Attractions
@@ -52,13 +53,24 @@ exports.createAttraction = asyncHandler(async (req, res, next) => {
 // @route   PUT /api/v2/attractions/:id
 // @access  Private
 exports.updateAttraction = asyncHandler(async (req, res, next) => {
-      const attraction = await Attraction.findByIdAndUpdate(req.params.id, req.body, {
-         new: true,
-         runValidators: true
-      });
+      let attraction = await Attraction.findById(req.params.id);
+
+      // check for attraction
       if(!attraction) {
          return next(new ErrorResponse(`Attraction not found with ID of ${req.params.id}`, 404));
       }
+
+      // Make sure user has proper permissions
+      if(attraction.user.toString() !== req.user.id && req.user.role !== 'admin'){
+         return next(new ErrorResponse(`User ${req.user.id} is not authorized to update this attraction`, 404));
+      }
+
+      // Update
+      attraction = await Attraction.findByIdAndUpdate(req.params.id, req.body, {
+         new: true,
+         runValidators: true
+      });
+
       res
          .status(200)
          .json({ success: true, data: attraction });   
@@ -69,9 +81,17 @@ exports.updateAttraction = asyncHandler(async (req, res, next) => {
 // @access  Private
 exports.deleteAttraction = asyncHandler(async (req, res, next) => {
       const attraction = await Attraction.findById(req.params.id);
+
+      // Make sure attraction exists
       if(!attraction) {
          return next(new ErrorResponse(`Attraction not found with ID of ${req.params.id}`, 404));
       }
+
+      // Make sure user has proper permissions
+      if(attraction.user.toString() !== req.user.id && req.user.role !== 'admin'){
+         return next(new ErrorResponse(`User ${req.user.id} is not authorized to update this attraction`, 404));
+      }
+
       attraction.remove();
       res
          .status(200)

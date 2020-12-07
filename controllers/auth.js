@@ -1,5 +1,7 @@
+const crypto = require('crypto');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
+const sendEmail = require('../utils/sendEmail');
 const User = require('../models/User');
 
 // @desc    Register User
@@ -77,12 +79,62 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 
    await user.save({ validateBeforeSave: false });
 
+   // Create reset URL
+   const resetUrl = `${req.protocol}://${req.get('host')}/api/v2/auth/resetpassword/${resetToken}`;
+
+   const message = `Someone has requested to reset your password.  Please go to \n\n ${resetUrl}`;
+
+   try {
+      await sendEmail({
+         email: user.email,
+         subject: 'Password reset token',
+         message
+      });
+
+      res.status(200).json({ success: true, data: 'Email sent' });
+   } catch (err) {
+      console.log(err);
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpire = undefined;
+
+      await user.save({ validateBeforeSave: false });
+
+      return next(new ErrorResponse('Email could not be sent', 500));
+   }
+
    res.status(200).json({ 
       success: true,
       data: user
     });
 });
 
+// @desc    Reset password
+// @route   PUT /api/v2/auth/resetpassword/:resettoken
+// @access  Public
+exports.resetPassword = asyncHandler(async (req, res, next) => {
+   // Get hashed token
+   const resetPasswordToken = crypto
+      .createHash('sha256')
+      .update(req.params.resettoken)
+      .digest('hex');
+
+   const user = await User.findOne({
+      resetPasswordToken,
+      resetPasswordExpire: { $gt: Date.now() }
+   });
+
+   if(!user) {
+      return next(new ErrorResponse('Invalid token', 400));
+   }
+
+   // Set new password
+   user.password = req.body.password;
+   user.resetPasswordToken = undefined;
+   user.resetPasswordExpire = undefined;
+   await user.save();
+
+   sendTokenResponse(user, 200, res);
+});
 
 // Get token from model, create cookie and send response
 const sendTokenResponse = (user, statusCode, res) => {

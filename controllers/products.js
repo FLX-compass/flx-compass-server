@@ -5,7 +5,7 @@ const Attraction = require('../models/Attraction');
 
 // @desc    Get All Products
 // @route   GET /api/v2/products
-// @route   GET /api/v2/attractions/products
+// @route   GET /api/v2/:attractionID/products
 // @access  Public
 exports.getProducts = asyncHandler(async (req, res, next) => {
    if(req.params.attractionId) {

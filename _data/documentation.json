@@ -1,0 +1,1033 @@
+{
+	"info": {
+		"_postman_id": "779d86f2-4dfc-4fd2-8c3a-80fda481af88",
+		"name": "FLXcompass Server API v2",
+		"description": "This is the API version 2.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Attractions",
+			"item": [
+				{
+					"name": "all Attractions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v2/attractions",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"attractions"
+							]
+						},
+						"description": "Description: Get All Attractions and includes pagination and filtering.\nRoute: GET /api/v2/attractions\nAccess: Public\nFilter example: \nattractions?category[in]=winery\nattractions?viewCount[lte]=1000"
+					},
+					"response": []
+				},
+				{
+					"name": "single Attraction",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v2/attractions/5f982d5c559aaa35d5e885e2",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"attractions",
+								"5f982d5c559aaa35d5e885e2"
+							]
+						},
+						"description": "Description - Get single attraction from Attraction ID as a param.\nRoute - GET /api/v2/attractions/:id\nAccess - Public"
+					},
+					"response": []
+				},
+				{
+					"name": "all Attractions within distance",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v2/attractions/radius/14456/5",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"attractions",
+								"radius",
+								"14456",
+								"5"
+							]
+						},
+						"description": "Description - Get Attractiosns within radius of a zipcode using miles.  Must provide ZIP code and distance in miles as params.\nRoute - GET /api/v2/attractions/radius/:zipcode/:distance\nAccess - Public"
+					},
+					"response": []
+				},
+				{
+					"name": "create Attraction",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "JSON type",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "   {\n      \"name\": \"Bill's Wines\",\n      \"address\": \"60 Castle Street, Geneva NY 14527\",\n      \"category\": \"winery\",\n      \"lake\": \"Seneca\"\n   }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/v2/attractions",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"attractions"
+							]
+						},
+						"description": "Description - Create Attraction\nRoute - POST /api/v2/attractions\nAccess - Private"
+					},
+					"response": []
+				},
+				{
+					"name": "delete Attraction",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v2/attractions/5f9b0736015d5b1c5a6d53a0",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"attractions",
+								"5f9b0736015d5b1c5a6d53a0"
+							]
+						},
+						"description": "Description - Delete Attraction by req ID\nRoute - DELETE /api/v2/attractions/:id\nAccess - Private"
+					},
+					"response": []
+				},
+				{
+					"name": "update Attraction",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "JSON type",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"bookmarkedCount\": 2\n}",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/v2/attractions/5f9ad729ff33fb652e8f2770",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"attractions",
+								"5f9ad729ff33fb652e8f2770"
+							]
+						},
+						"description": "Description - Update Attraction by req.params.id\nRoute - PUT /api/v2/attractions/:id\nAccess  Private, must be Admin or Owner"
+					},
+					"response": []
+				},
+				{
+					"name": "create Attraction",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "JSON type",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "   {\n      \"name\": \"Atwater Vineyards\",\n      \"description\": \"Placeholder for description\",\n      \"address\": \"5055 State Route 414 Burdett NY 14818\",\n      \"categories\": [\n         \"winery\"\n      ]\n   }"
+						},
+						"url": {
+							"raw": "{{URL}}/api/v2/attractions",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"attractions"
+							]
+						},
+						"description": "Description - Create Attraction that is authenticated with Attraction model.  Required fields include: name, description, address, and category.\nRoute - POST /api/v2/attractions\nAccess - Private, must be Admin or Owner."
+					},
+					"response": []
+				},
+				{
+					"name": "upload Attraction photo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "JSON type",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/home/jason/Documents/Projects/flx-compass/client/public/img/anthony-road.png"
+								}
+							],
+							"options": {
+								"formdata": {}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/v2/attractions/5f982d5c559aaa35d5e885e2/photos",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"attractions",
+								"5f982d5c559aaa35d5e885e2",
+								"photos"
+							]
+						},
+						"description": "Description - Upload photo file to public/uploads directory and insert path into database\nRoute - PUT /api/v2/attractions/:id/photo\nAccess - Private"
+					},
+					"response": []
+				}
+			],
+			"description": "CRUD functionality for Attraction collection.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "dd706f41-8c55-4bb0-8e89-e3e06a6047bc",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "b2939023-2965-479f-bc34-2331e09bfc48",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "all Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v2/products",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"products"
+							]
+						},
+						"description": "Description - Get All Products\nRoute - GET /api/v2/products\nAccess - Public"
+					},
+					"response": []
+				},
+				{
+					"name": "all Products for an Attraction",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v2/attractions/5f982d5c559aaa35d5e885eb/products",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"attractions",
+								"5f982d5c559aaa35d5e885eb",
+								"products"
+							]
+						},
+						"description": "Description - Get All Products for an Attraction using the Attraction ID as a parameter.\nRoute - GET /api/v2/:attractionID/products\nAccess - Public"
+					},
+					"response": []
+				},
+				{
+					"name": "single Product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v2/products/5f983171ab07d03e33a02ccc",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"products",
+								"5f983171ab07d03e33a02ccc"
+							]
+						},
+						"description": "Description - Get Single Product\nRoute - GET /api/v2/products/:ID\nAccess  Public"
+					},
+					"response": []
+				},
+				{
+					"name": "add Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "JSON type",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmOWFiNmViYmE2ZDkzM2QzM2RhOTdmOCIsImlhdCI6MTYwMzk3NjQ1NCwiZXhwIjoxNjA2NTY4NDU0fQ.sMRZwB1o3P-Q3hRrk4RxrAYpX9zBTvr4nOUgmGNdmPM",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productName\": \"Sam Dave\",\n    \"brand\": \"Semi sweet reisling\",\n    \"category\": \"wine\"\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/api/v2/attractions/5f9c11c7c8aa113a944be39f/products",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"attractions",
+								"5f9c11c7c8aa113a944be39f",
+								"products"
+							]
+						},
+						"description": "Desc - add Product\nRoute - POST /api/v2/attractions/:attractionID/products\nAccess - Private"
+					},
+					"response": []
+				},
+				{
+					"name": "update Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "JSON type",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "   {\n        \"productName\": \"Bill Bill Sweet\"\n   }"
+						},
+						"url": {
+							"raw": "{{URL}}/api/v2/products/5f9c1256c8aa113a944be3a1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"products",
+								"5f9c1256c8aa113a944be3a1"
+							]
+						},
+						"description": "Description - Update Product requires product ID as a parameter.  Can update product fields.\nRoute - PUT /api/v2/products/:productID\nAccess - Private"
+					},
+					"response": []
+				},
+				{
+					"name": "remove Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "JSON type",
+								"type": "text"
+							},
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmOWFiNmViYmE2ZDkzM2QzM2RhOTdmOCIsImlhdCI6MTYwMzk3NjQ1NCwiZXhwIjoxNjA2NTY4NDU0fQ.sMRZwB1o3P-Q3hRrk4RxrAYpX9zBTvr4nOUgmGNdmPM",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/api/v2/products/5f9c1256c8aa113a944be3a1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"products",
+								"5f9c1256c8aa113a944be3a1"
+							]
+						},
+						"description": "Description - Delete Product\nRoute - DELETE /api/v2/products/:id\nAccess - Private"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "register User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ba0c8ffc-bc7b-4504-9f09-93ef95ad1073",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "JSON type",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "   {\n      \"name\": \"Dave\",\n      \"role\": \"publisher\",\n      \"email\": \"dave@gmail.com\",\n      \"password\": \"abcd1234\"\n   }"
+						},
+						"url": {
+							"raw": "{{URL}}/api/v2/auth/register",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"auth",
+								"register"
+							]
+						},
+						"description": "Description - Register new user.  Requires name, role, email, and password.\nRoute - GET /api/v2/auth/register\nAccess - Public"
+					},
+					"response": []
+				},
+				{
+					"name": "login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bf2803ca-df1b-4c69-84dd-24ba41c0aea1",
+								"exec": [
+									"pm.environment.set(\"TOKEN\", pm.response.json().token)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "JSON type",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"bill@gmail.com\",\n    \"password\": \"abcd1234\"\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/api/v2/auth/login",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Description - Login User requires email and password and will provide cookie.\nRoute - POST /api/v2/auth/login\nAccess - Public\n"
+					},
+					"response": []
+				},
+				{
+					"name": "get Me",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "61579690-1df0-4e4e-a15c-c0c25d8dd59f",
+								"exec": [
+									"pm.environment.set('TOKEN', pm.response.json().token)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "JSON type",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/api/v2/auth/me",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"auth",
+								"me"
+							]
+						},
+						"description": "Description - Get current logged in user. Must authenticate with bearer token or cookie.  Returns user name, email, id.\nRoute - POST /api/v2/auth/updatedetails\nAccess - Private\n"
+					},
+					"response": []
+				},
+				{
+					"name": "forgot password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "JSON type",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"john@gmail.com\"\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/api/v2/auth/forgotpassword",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"auth",
+								"forgotpassword"
+							]
+						},
+						"description": "Description -  Forgot password route will get a reset password token and reset password expire time of 10 minutes.\nRoute - POST /api/v2/auth/forgotpassword\nAccess - Public"
+					},
+					"response": []
+				},
+				{
+					"name": "update User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "JSON type",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"dave@gmail.com\",\n    \"name\": \"Dave Bunnell\"\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/api/v2/auth/updatedetails",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"auth",
+								"updatedetails"
+							]
+						},
+						"description": "Description - Get current logged in user\nRoute - POST /api/v2/auth/updatedetails\nAccess - Private\nAllows user to update name and email."
+					},
+					"response": []
+				},
+				{
+					"name": "update Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "JSON type",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"currentPassword\": \"abc123\",\n    \"newPassword\": \"abcd1234\"\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/api/v2/auth/updatepassword",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"auth",
+								"updatepassword"
+							]
+						},
+						"description": "Description - Update password\nRoute - PUT /api/v2/auth/updatepassword\nAccess - Private\nLet's logged in user create new password.  Requires both currentPassword and newPassword in body."
+					},
+					"response": []
+				},
+				{
+					"name": "Logout user & clear token",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v2/auth/logout",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"auth",
+								"logout"
+							]
+						},
+						"description": "Description - Log user out / clear cookie\nRoute - GET /api/v2/auth/logout\nAccess - Private"
+					},
+					"response": []
+				}
+			],
+			"description": "Routes for user authentication, registering, login, reset password, etc.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "3493f4c9-5b64-4275-8f22-ef794e4c1d56",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "3c00ca6d-bf26-449c-9413-2e13e3e614d5",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "JSON type",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/api/v2/users",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"users"
+							]
+						},
+						"description": "Description - Get all users\nRoute - GET /api/v2/auth/users\nAccess - Private/Admin\nAdmin can see all users name, email, and role."
+					},
+					"response": []
+				},
+				{
+					"name": "get single user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bf2803ca-df1b-4c69-84dd-24ba41c0aea1",
+								"exec": [
+									"pm.environment.set(\"TOKEN\", pm.response.json().token)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "JSON type",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"jason.bunnell@gmail.com\",\n    \"password\": \"abc123\"\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/api/v2/auth/login",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Desc - Get single user\nRoute - GET /api/v2/auth/users/:id\nAccess - Private/Admin\nAdmin can get single user info including name, email, role."
+					},
+					"response": []
+				},
+				{
+					"name": "Create new user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "JSON type",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Mark Hallman\",\n    \"email\": \"john.mark.hallman@gmail.com\",\n    \"password\": \"abc123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/v2/users",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"users"
+							]
+						},
+						"description": "Desc - Create user\nRoute - POST /api/v2/auth/users/\nAccess - Private/Admin\nAdmin can create new user.  Requires name, email, and password.  role is optional and default role is user."
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "JSON type",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"role\": \"publisher\"\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/api/v2/users/5fd69f5d7627d0379efa48fe",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"users",
+								"5fd69f5d7627d0379efa48fe"
+							]
+						},
+						"description": "Description - Update user\nRoute - PUT /api/v2/auth/users/:id\nAccess - Private/Admin\nAdmin can update user fields"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "JSON type",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/api/v2/users/5fd6a16c4f97003bc7c76826",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"users",
+								"5fd6a16c4f97003bc7c76826"
+							]
+						},
+						"description": "Description - Delete user\nRoute - DELETE /api/v2/auth/users/:id\nAccess - Private/Admin\nAdmin can delete user."
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

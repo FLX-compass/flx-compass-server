@@ -118,18 +118,18 @@ const AttractionSchema = new mongoose.Schema({
       type: Number,
       default: 0
    },
-   bookmarkedCount: {
-     type: Number,
-     default: 0
-   },
-   likedCount: {
-     type: Number,
-     default: 0
-   },
    family: {
       type: Boolean,
       default: false
    },
+   likes: [
+      {
+         user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'users'
+         }
+      }
+   ],
    user: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',

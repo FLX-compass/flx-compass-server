@@ -175,3 +175,31 @@ exports.attractionPhotoUpload = asyncHandler(async (req, res, next) => {
    })
    });
 });
+
+// @desc    Like attraction
+// @route   PUT /api/v2/attractions/like/:attraction_id
+// @access  Private
+exports.likeAttraction = asyncHandler(async (req, res, next) => {
+   let attraction = await Attraction.findById(req.params.id);
+
+   // check for attraction
+   if(!attraction) {
+      return next(new ErrorResponse(`Attraction not found with ID of ${req.params.id}`, 404));
+   }
+
+   // Check if the post has already been liked
+   if(attraction.likes.filter(like => like.user.toString() === req.user.id).length > 0) {
+      return next(new ErrorResponse(`Attraction already liked`, 404));
+   }
+
+   // Update
+   attraction = await Attraction.findById({ _id: req.params.id});
+
+   attraction.likes = attraction.likes.concat(req.user.id);
+
+   await attraction.save();
+
+   res
+      .status(200)
+      .json({ success: true, data: attraction.likes });   
+});

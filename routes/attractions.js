@@ -23,7 +23,7 @@ const router = express.Router();
 const { protect, authorize } = require('../middleware/auth');
 
 // Re-route into other resource routers
-router.use('/:attractionId/products', productRouter);
+router.use('/:attractionId/products', protect, productRouter);
 
 router.route('/radius/:zipcode/:distance')
    .get(getAttractionsInRadius);
@@ -39,7 +39,7 @@ router
 
 router
    .route('/:id')
-   .get(getAttraction)
+   .get(protect, getAttraction)
    .put(protect, authorize('publisher', 'admin'), updateAttraction)
    .delete(protect, authorize('publisher', 'admin'), deleteAttraction);
 

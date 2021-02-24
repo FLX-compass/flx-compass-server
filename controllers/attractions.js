@@ -135,9 +135,12 @@ exports.attractionPhotoUpload = asyncHandler(async (req, res, next) => {
    }
 
    // Make sure user has proper permissions
-   if(attraction.user.toString() !== req.user.id && req.user.role !== 'admin'){
-      return next(new ErrorResponse(`User ${req.user.id} is not authorized to add a photo to this attraction`, 404));
-   }
+   
+   // not sure this logic. I need more explain
+
+   // if(attraction.user.toString() !== req.user.id && req.user.role !== 'admin'){
+   //    return next(new ErrorResponse(`User ${req.user.id} is not authorized to add a photo to this attraction`, 404));
+   // }
    
    if(!req.files) {
       return next(
@@ -156,8 +159,15 @@ exports.attractionPhotoUpload = asyncHandler(async (req, res, next) => {
       return next(new ErrorResponse(`Please upload an image file size less than ${process.env.MAX_FILE_UPLOAD}.`, 400))
    }
 
+
+   let photos = attraction.photos;
+
+   console.log("photos[0]", photos[0]);
+
+   photos = photos? photos.length === 1 && photos[0] === 'no-photo.jpg'? [] : photos: [];
+
    // Create custom filename
-   file.name = `photo_${attraction._id}${path.parse(file.name).ext}`;
+   file.name = `photo_${attraction._id}_${photos.length+1}${path.parse(file.name).ext}`;
 
    // Move to uploads folder
    file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async err => {
@@ -167,7 +177,11 @@ exports.attractionPhotoUpload = asyncHandler(async (req, res, next) => {
             new ErrorResponse(`Problem with file upload`, 500)
          );
       }
-   await Attraction.findByIdAndUpdate(req.params.id, { photo: file.name });
+   
+   // check if photos array is default array or empty. if the value is default array or undefined, set it to []
+   // add photo
+
+   await Attraction.findByIdAndUpdate(req.params.id, { photos: [...photos, file.name] });
 
    res.status(200).json({
       success: true,
@@ -188,18 +202,52 @@ exports.likeAttraction = asyncHandler(async (req, res, next) => {
    }
 
    // Check if the post has already been liked
-   if(attraction.likes.filter(like => like.user.toString() === req.user.id).length > 0) {
+   if(attraction.likes.filter(like => like.toString() === req.user._id.toString()).length > 0) {
       return next(new ErrorResponse(`Attraction already liked`, 404));
    }
 
    // Update
-   attraction = await Attraction.findById({ _id: req.params.id});
-
-   attraction.likes = attraction.likes.concat(req.user.id);
-
-   await attraction.save();
+   attraction = await Attraction
+      .findByIdAndUpdate(
+         req.params.id, 
+         { likes: [...attraction.likes, req.user._id]},
+         {
+            new: true,
+            runValidators: true
+         });
 
    res
       .status(200)
       .json({ success: true, data: attraction.likes });   
+});
+
+// @desc    Bookmark attraction
+// @route   PUT /api/v2/attractions/bookmark/:attraction_id
+// @access  Private
+exports.bookmarkAttraction = asyncHandler(async (req, res, next) => {
+   let attraction = await Attraction.findById(req.params.id);
+
+   // check for attraction
+   if(!attraction) {
+      return next(new ErrorResponse(`Attraction not found with ID of ${req.params.id}`, 404));
+   }
+
+   // Check if the post has already been bookmarked
+   if(attraction.bookmarks.filter(bookmark => bookmark.toString() === req.user._id.toString()).length > 0) {
+      return next(new ErrorResponse(`Attraction already bookmarked`, 404));
+   }
+
+   // Update
+   attraction = await Attraction
+      .findByIdAndUpdate(
+         req.params.id, 
+         { bookmarks: [...attraction.bookmarks, req.user._id]},
+         {
+            new: true,
+            runValidators: true
+         });
+
+   res
+      .status(200)
+      .json({ success: true, data: attraction.bookmarks });   
 });

@@ -98,9 +98,9 @@ const AttractionSchema = new mongoose.Schema({
       ]
    },
    avgCost: Number,
-   photo: {
-     type: String,
-     default: 'no-photo.jpg'
+   photos: {
+      type: Array,
+      default: ['no-photo.jpg']
    },
    compassMember: {
      type: Boolean,
@@ -124,10 +124,14 @@ const AttractionSchema = new mongoose.Schema({
    },
    likes: [
       {
-         user: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'users'
-         }
+         type: mongoose.Schema.Types.ObjectId,
+         ref: 'users'
+      }
+   ],
+   bookmarks: [
+      {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: 'users'
       }
    ],
    user: {

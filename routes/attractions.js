@@ -7,7 +7,8 @@ const {
    deleteAttraction,
    getAttractionsInRadius,
    attractionPhotoUpload,
-   likeAttraction
+   likeAttraction,
+   bookmarkAttraction
 } = require('../controllers/attractions');
 
 const Attraction = require('../models/Attraction');
@@ -46,5 +47,10 @@ router
 router
    .route('/like/:id')
    .put(protect, authorize('user', 'publisher', 'admin'), likeAttraction);
+
+router
+   .route('/bookmark/:id')
+   .put(protect, authorize('user', 'publisher', 'admin'), bookmarkAttraction);
+
 
 module.exports = router;

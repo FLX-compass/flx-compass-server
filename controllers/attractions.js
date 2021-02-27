@@ -4,6 +4,7 @@ const asyncHandler = require('../middleware/async');
 const geocoder = require('../utils/geocoder');
 const Attraction = require('../models/Attraction');
 const { truncate } = require('fs');
+const { createCipher } = require('crypto');
 
 
 // @desc    Get All Attractions
@@ -17,6 +18,7 @@ exports.getAttractions = asyncHandler(async (req, res, next) => {
 // @route   GET /api/v2/attractions/:id
 // @access  Public
 exports.getAttraction = asyncHandler(async (req, res, next) => {
+   try {
       const attraction = await Attraction.findById(req.params.id);
       if(!attraction) {
          return next(new ErrorResponse(`Attraction not found with ID of ${req.params.id}`, 404));
@@ -24,6 +26,10 @@ exports.getAttraction = asyncHandler(async (req, res, next) => {
       res
          .status(200)
          .json({ success: true, data: attraction });
+
+   } catch(error) {
+      next(error);
+   }
 });
 
 // @desc    Create Attraction

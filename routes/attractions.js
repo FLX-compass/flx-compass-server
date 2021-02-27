@@ -1,4 +1,6 @@
 const express = require('express');
+const hpp = require('hpp');
+
 const {
    getAttractions,
    getAttraction,
@@ -37,7 +39,7 @@ router
 
 router
    .route('/')
-   .get(advancedResults(Attraction, 'products'), getAttractions)
+   .get(hpp({ whitelist: [ 'category', 'lake'] }), advancedResults(Attraction, 'products'), getAttractions)
    .post(protect, authorize('publisher', 'admin'), createAttraction);
 
 router

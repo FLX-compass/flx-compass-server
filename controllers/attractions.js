@@ -251,3 +251,70 @@ exports.bookmarkAttraction = asyncHandler(async (req, res, next) => {
       .status(200)
       .json({ success: true, data: attraction.bookmarks });   
 });
+
+// @desc    UnLike attraction
+// @route   PUT /api/v2/attractions/unlike/:attraction_id
+// @access  Private
+exports.unLikeAttraction = asyncHandler(async (req, res, next) => {
+   let attraction = await Attraction.findById(req.params.id);
+
+   // check for attraction
+   if(!attraction) {
+      return next(new ErrorResponse(`Attraction not found with ID of ${req.params.id}`, 404));
+   }
+
+   // Check if the post has been liked
+   if(attraction.likes.find(like => like.toString() === req.user._id.toString()) === undefined) {
+      return next(new ErrorResponse(`Attraction not liked`, 404));
+   }
+
+   // Update
+   attraction = await Attraction
+      .findByIdAndUpdate(
+         req.params.id, 
+         {
+            likes: attraction.likes.filter(
+               like => like.toString() !== req.user._id.toString()
+            )
+         },
+         {
+            new: true,
+            runValidators: true
+         });
+
+   res
+      .status(200)
+      .json({ success: true, data: attraction.likes });   
+});
+
+// @desc    UnBookmark attraction
+// @route   PUT /api/v2/attractions/unbookmark/:attraction_id
+// @access  Private
+exports.unBookmarkAttraction = asyncHandler(async (req, res, next) => {
+   let attraction = await Attraction.findById(req.params.id);
+
+   // check for attraction
+   if(!attraction) {
+      return next(new ErrorResponse(`Attraction not found with ID of ${req.params.id}`, 404));
+   }
+
+   // Check if the post has been bookmarked
+   if(attraction.bookmarks.find(bookmark => bookmark.toString() === req.user._id.toString()) === undefined) {
+      return next(new ErrorResponse(`Attraction not bookmarked`, 404));
+   }
+
+   // Update
+   attraction = await Attraction
+      .findByIdAndUpdate(
+         req.params.id, 
+         { bookmarks: attraction.bookmarks.filter(
+            bookmark => bookmark.toString() !== req.user._id.toString())},
+         {
+            new: true,
+            runValidators: true
+         });
+
+   res
+      .status(200)
+      .json({ success: true, data: attraction.bookmarks });   
+});

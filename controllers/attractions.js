@@ -142,11 +142,9 @@ exports.attractionPhotoUpload = asyncHandler(async (req, res, next) => {
 
    // Make sure user has proper permissions
    
-   // not sure this logic. I need more explain
-
-   // if(attraction.user.toString() !== req.user.id && req.user.role !== 'admin'){
-   //    return next(new ErrorResponse(`User ${req.user.id} is not authorized to add a photo to this attraction`, 404));
-   // }
+   if(attraction.user.toString() !== req.user._id.toString() && req.user.role !== 'admin'){
+      return next(new ErrorResponse(`User ${req.user.id} is not authorized to add a photo to this attraction`, 404));
+   }
    
    if(!req.files) {
       return next(

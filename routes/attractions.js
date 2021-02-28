@@ -1,4 +1,6 @@
 const express = require('express');
+const hpp = require('hpp');
+
 const {
    getAttractions,
    getAttraction,
@@ -8,7 +10,9 @@ const {
    getAttractionsInRadius,
    attractionPhotoUpload,
    likeAttraction,
-   bookmarkAttraction
+   bookmarkAttraction,
+   unLikeAttraction,
+   unBookmarkAttraction
 } = require('../controllers/attractions');
 
 const Attraction = require('../models/Attraction');
@@ -35,7 +39,7 @@ router
 
 router
    .route('/')
-   .get(advancedResults(Attraction, 'products'), getAttractions)
+   .get(hpp({ whitelist: [ 'category', 'lake'] }), advancedResults(Attraction, 'products'), getAttractions)
    .post(protect, authorize('publisher', 'admin'), createAttraction);
 
 router
@@ -52,5 +56,12 @@ router
    .route('/bookmark/:id')
    .put(protect, authorize('user', 'publisher', 'admin'), bookmarkAttraction);
 
+router
+   .route('/unlike/:id')
+   .put(protect, authorize('user', 'publisher', 'admin'), unLikeAttraction);
+
+router
+   .route('/unbookmark/:id')
+   .put(protect, authorize('user', 'publisher', 'admin'), unBookmarkAttraction);
 
 module.exports = router;

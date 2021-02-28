@@ -4,6 +4,7 @@ const asyncHandler = require('../middleware/async');
 const geocoder = require('../utils/geocoder');
 const Attraction = require('../models/Attraction');
 const { truncate } = require('fs');
+const { createCipher } = require('crypto');
 
 
 // @desc    Get All Attractions
@@ -17,6 +18,7 @@ exports.getAttractions = asyncHandler(async (req, res, next) => {
 // @route   GET /api/v2/attractions/:id
 // @access  Public
 exports.getAttraction = asyncHandler(async (req, res, next) => {
+   try {
       const attraction = await Attraction.findById(req.params.id);
       if(!attraction) {
          return next(new ErrorResponse(`Attraction not found with ID of ${req.params.id}`, 404));
@@ -24,6 +26,10 @@ exports.getAttraction = asyncHandler(async (req, res, next) => {
       res
          .status(200)
          .json({ success: true, data: attraction });
+
+   } catch(error) {
+      next(error);
+   }
 });
 
 // @desc    Create Attraction
@@ -136,11 +142,9 @@ exports.attractionPhotoUpload = asyncHandler(async (req, res, next) => {
 
    // Make sure user has proper permissions
    
-   // not sure this logic. I need more explain
-
-   // if(attraction.user.toString() !== req.user.id && req.user.role !== 'admin'){
-   //    return next(new ErrorResponse(`User ${req.user.id} is not authorized to add a photo to this attraction`, 404));
-   // }
+   if(attraction.user.toString() !== req.user._id.toString() && req.user.role !== 'admin'){
+      return next(new ErrorResponse(`User ${req.user.id} is not authorized to add a photo to this attraction`, 404));
+   }
    
    if(!req.files) {
       return next(
@@ -242,6 +246,73 @@ exports.bookmarkAttraction = asyncHandler(async (req, res, next) => {
       .findByIdAndUpdate(
          req.params.id, 
          { bookmarks: [...attraction.bookmarks, req.user._id]},
+         {
+            new: true,
+            runValidators: true
+         });
+
+   res
+      .status(200)
+      .json({ success: true, data: attraction.bookmarks });   
+});
+
+// @desc    UnLike attraction
+// @route   PUT /api/v2/attractions/unlike/:attraction_id
+// @access  Private
+exports.unLikeAttraction = asyncHandler(async (req, res, next) => {
+   let attraction = await Attraction.findById(req.params.id);
+
+   // check for attraction
+   if(!attraction) {
+      return next(new ErrorResponse(`Attraction not found with ID of ${req.params.id}`, 404));
+   }
+
+   // Check if the post has been liked
+   if(attraction.likes.find(like => like.toString() === req.user._id.toString()) === undefined) {
+      return next(new ErrorResponse(`Attraction not liked`, 404));
+   }
+
+   // Update
+   attraction = await Attraction
+      .findByIdAndUpdate(
+         req.params.id, 
+         {
+            likes: attraction.likes.filter(
+               like => like.toString() !== req.user._id.toString()
+            )
+         },
+         {
+            new: true,
+            runValidators: true
+         });
+
+   res
+      .status(200)
+      .json({ success: true, data: attraction.likes });   
+});
+
+// @desc    UnBookmark attraction
+// @route   PUT /api/v2/attractions/unbookmark/:attraction_id
+// @access  Private
+exports.unBookmarkAttraction = asyncHandler(async (req, res, next) => {
+   let attraction = await Attraction.findById(req.params.id);
+
+   // check for attraction
+   if(!attraction) {
+      return next(new ErrorResponse(`Attraction not found with ID of ${req.params.id}`, 404));
+   }
+
+   // Check if the post has been bookmarked
+   if(attraction.bookmarks.find(bookmark => bookmark.toString() === req.user._id.toString()) === undefined) {
+      return next(new ErrorResponse(`Attraction not bookmarked`, 404));
+   }
+
+   // Update
+   attraction = await Attraction
+      .findByIdAndUpdate(
+         req.params.id, 
+         { bookmarks: attraction.bookmarks.filter(
+            bookmark => bookmark.toString() !== req.user._id.toString())},
          {
             new: true,
             runValidators: true

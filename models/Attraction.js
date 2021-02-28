@@ -127,7 +127,7 @@ const AttractionSchema = new mongoose.Schema({
    likes: [
       {
          type: mongoose.Schema.Types.ObjectId,
-         ref: 'users'
+         ref: 'User'
       }
    ],
    bookmarks: [

@@ -7,6 +7,8 @@ const geocoder = require('../utils/geocoder');
 // address
 // lake
 // category
+
+// NOT REQUIRED
 // likedCount
 // bookmarkedCount
 // viewCount

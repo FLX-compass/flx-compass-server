@@ -71,7 +71,7 @@ const advancedResults = (model, populate) => async(req, res, next) => {
                   {
                      "$project": {
                         ...select,
-                        "likesCount": { "$size": "$likes" }
+                        "likesCount": { "$size": { "$ifNull": [ "$likes", [] ] } }
                    }},
                    { "$sort": { "sponsored": -1, "likesCount": -1, "name": 1 } },
                    { "$match": { ...conditionQuery }},

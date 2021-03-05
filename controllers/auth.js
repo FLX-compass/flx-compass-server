@@ -3,6 +3,8 @@ const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const sendEmail = require('../utils/sendEmail');
 const User = require('../models/User');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // @desc    Register User
 // @route   POST /api/v2/auth/register
@@ -136,29 +138,27 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
    const resetUrl = `${req.protocol}://${req.get('host')}/api/v2/auth/resetpassword/${resetToken}`;
 
    const message = `Someone has requested to reset your password.  Please go to \n\n ${resetUrl}`;
-
+    
    try {
-      await sendEmail({
-         email: user.email,
+      await sgMail.send({
+         to: user.email,
          subject: 'Password reset token',
-         message
+         from: process.env.NO_REPLY_EMAIL,
+         text: message
       });
-
       res.status(200).json({ success: true, data: 'Email sent' });
-   } catch (err) {
-      console.log(err);
+
+   } catch (error) {
+      console.error(error);
+   
+      if (error.response) {
+         console.error(error.response.body)
+      }
       user.resetPasswordToken = undefined;
       user.resetPasswordExpire = undefined;
 
-      await user.save({ validateBeforeSave: false });
-
       return next(new ErrorResponse('Email could not be sent', 500));
    }
-
-   res.status(200).json({ 
-      success: true,
-      data: user
-    });
 });
 
 // @desc    Reset password

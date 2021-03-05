@@ -58,6 +58,7 @@ const advancedResults = (model, populate) => async(req, res, next) => {
       // SORT
       if(req.query.sort) {
          const sortBy = req.query.sort.split(',').join(' ');
+         console.log("sortBy", sortBy);
          query = query.sort(sortBy);
       } else {
          if(model.modelName === 'Attraction') { // default sort for Attraction model
@@ -81,7 +82,7 @@ const advancedResults = (model, populate) => async(req, res, next) => {
    
             res.advancedResults = {
                success: true,
-               count: results.length,
+               count: [total, results.length],
                pagination,
                data: results
             }
@@ -103,7 +104,7 @@ const advancedResults = (model, populate) => async(req, res, next) => {
    
       res.advancedResults = {
          success: true,
-         count: results.length,
+         count: [total, results.length],
          pagination,
          data: results
       }

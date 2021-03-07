@@ -33,7 +33,7 @@ const advancedResults = (model, populate) => async(req, res, next) => {
    
       // Pagination, set page default and limit default after ||
       const page = parseInt(req.query.page, 10) || 1;
-      const limit = parseInt(req.query.limit, 10) || 1000;
+      const limit = parseInt(req.query.limit, 10) || 25;
       const startIndex = (page - 1) * limit;
       const endIndex = page * limit; 
       const total = await model.countDocuments();
@@ -82,7 +82,7 @@ const advancedResults = (model, populate) => async(req, res, next) => {
    
             res.advancedResults = {
                success: true,
-               count: [total, results.length],
+               count: total,
                pagination,
                data: results
             }
@@ -104,7 +104,7 @@ const advancedResults = (model, populate) => async(req, res, next) => {
    
       res.advancedResults = {
          success: true,
-         count: [total, results.length],
+         count: total,
          pagination,
          data: results
       }

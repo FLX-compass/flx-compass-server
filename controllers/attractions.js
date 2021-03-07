@@ -19,10 +19,23 @@ exports.getAttractions = asyncHandler(async (req, res, next) => {
 // @access  Public
 exports.getAttraction = asyncHandler(async (req, res, next) => {
    try {
-      const attraction = await Attraction.findById(req.params.id);
+      let attraction = await Attraction.findById(req.params.id);
       if(!attraction) {
          return next(new ErrorResponse(`Attraction not found with ID of ${req.params.id}`, 404));
       }
+      
+      // increase view count
+
+      attraction = await Attraction.findByIdAndUpdate(
+         req.params.id, 
+         { 
+            viewCount: attraction.viewCount + 1 
+         },
+         {
+            new: false,
+            runValidators: true
+         });
+      
       res
          .status(200)
          .json({ success: true, data: attraction });

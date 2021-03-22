@@ -67,7 +67,8 @@ app.use(hpp());
 app.use(cors());
 
 // Set static public folder
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, process.env.FILE_UPLOAD_PATH)));
 
 // Mount routers
 app.use('/api/v2/attractions', attractions);

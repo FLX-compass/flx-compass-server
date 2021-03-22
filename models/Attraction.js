@@ -15,6 +15,13 @@ const geocoder = require('../utils/geocoder');
 // sponsored - bool
 // family - bool
 
+const OperatingHoursSchema = new mongoose.Schema({
+   dayOfWeek: String,
+   open: Boolean,
+   opens: String,
+   closes: String
+})
+
 const AttractionSchema = new mongoose.Schema({
    name: {
      type: String,
@@ -141,6 +148,53 @@ const AttractionSchema = new mongoose.Schema({
       ref: 'User',
       required: true,
       default: "5f9ad64912e13f63b848d13e"
+   },
+   operatingHours: {
+      type: [OperatingHoursSchema],
+      default: [
+         {
+            dayOfWeek: 'Sunday',
+            open: false,
+            opens: '10:00',
+            closes: '17:00'
+         },
+         {
+            dayOfWeek: 'Monday',
+            open: false,
+            opens: '10:00',
+            closes: '17:00'
+         },
+         {
+            dayOfWeek: 'Tuesday',
+            open: true,
+            opens: '10:00',
+            closes: '17:00'
+         },
+         {
+            dayOfWeek: 'Wednesday',
+            open: true,
+            opens: '10:00',
+            closes: '17:00'
+         },
+         {
+            dayOfWeek: 'Thursday',
+            open: true,
+            opens: '10:00',
+            closes: '17:00'
+         },
+         {
+            dayOfWeek: 'Friday',
+            open: true,
+            opens: '10:00',
+            closes: '17:00'
+         },
+         {
+            dayOfWeek: 'Saturday',
+            open: true,
+            opens: '10:00',
+            closes: '17:00'
+         }
+      ]      
    }
  },
  {

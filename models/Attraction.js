@@ -27,6 +27,10 @@ const OperatingHoursSchema = new mongoose.Schema({
    closes: {
       type: String,
       default: '17:00'
+   },
+   isOpen: {
+      type: Boolean,
+      default: false
    }
 })
 

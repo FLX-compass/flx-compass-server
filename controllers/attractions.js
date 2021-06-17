@@ -5,6 +5,7 @@ const geocoder = require('../utils/geocoder');
 const Attraction = require('../models/Attraction');
 const { truncate } = require('fs');
 const { createCipher } = require('crypto');
+const moment = require('moment');
 
 
 // @desc    Get All Attractions
@@ -23,6 +24,8 @@ exports.getAttraction = asyncHandler(async (req, res, next) => {
       if(!attraction) {
          return next(new ErrorResponse(`Attraction not found with ID of ${req.params.id}`, 404));
       }
+
+      
       
       // increase view count
 
@@ -35,6 +38,15 @@ exports.getAttraction = asyncHandler(async (req, res, next) => {
             new: false,
             runValidators: true
          });
+
+         if(attraction.operatingHours.length > 0){
+            attraction.operatingHours.map(days => {
+               days.opens = moment(days.opens, 'hh:mm').day(days.day)
+               days.closes = moment(days.closes, 'hh:mm').day(days.day)
+               days.isOpen = moment().isBetween(days.opens, days.closes);
+               console.log(`Debug time: ${days.opens} - ${days.closes}, is opened ${days.isOpen}`)
+            })
+         }
       
       res
          .status(200)

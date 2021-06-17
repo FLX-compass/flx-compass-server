@@ -4,21 +4,132 @@
       "name": "Abandon Brewing Company",
       "address": "2994 Merritt Hill Road Penn Yan New York 14527",
       "category": "brewery",
-      "lake": "Keuka"
+      "lake": "Keuka",
+      "operatingHours": [
+         {
+            "day": "Monday",
+            "opens": "9:00",
+            "closes": "17:00"
+         },
+         {
+            "day": "Tuesday",
+            "opens": "9:00",
+            "closes": "17:00"
+         },
+         {
+            "day": "Wednesday",
+            "opens": "9:00",
+            "closes": "17:00"
+         },
+         {
+            "day": "Thursday",
+            "opens": "9:00",
+            "closes": "17:00"
+         },
+         {
+            "day": "Friday",
+            "opens": "9:00",
+            "closes": "17:00"
+         },
+         {
+            "day": "Saturday",
+            "opens": "9:00",
+            "closes": "17:00"
+         },
+         {
+            "day": "Sunday",
+            "opens": "9:00",
+            "closes": "17:00"
+         }
+      ]
    },
    {
       "_id": "5f982d5c559aaa35d5e885e2",
       "name": "Anthony Road Wine Company",
       "address": "1020 Anthony Rd, Penn Yan, NY 14527",
       "category": "winery",
-      "lake": "Seneca"
+      "lake": "Seneca",
+      "operatingHours": [
+         {
+            "day": "Monday",
+            "opens": "9:00",
+            "closes": "17:00"
+         },
+         {
+            "day": "Tuesday",
+            "opens": "9:00",
+            "closes": "17:00"
+         },
+         {
+            "day": "Wednesday",
+            "opens": "9:00",
+            "closes": "17:00"
+         },
+         {
+            "day": "Thursday",
+            "opens": "9:00",
+            "closes": "17:00"
+         },
+         {
+            "day": "Friday",
+            "opens": "9:00",
+            "closes": "17:00"
+         },
+         {
+            "day": "Saturday",
+            "opens": "9:00",
+            "closes": "17:00"
+         },
+         {
+            "day": "Sunday",
+            "opens": "9:00",
+            "closes": "17:00"
+         }
+      ]
    },
    {
       "_id": "5f982d5c559aaa35d5e885e3",
       "name": "Atwater Estate Vineyards",
       "address": "5055 New York 414 Burdett, NY 14818",
       "category": "winery",
-      "lake": "Seneca"
+      "lake": "Seneca",
+      "operatingHours": [
+         {
+            "day": "Monday",
+            "opens": "9:00",
+            "closes": "17:00"
+         },
+         {
+            "day": "Tuesday",
+            "opens": "9:00",
+            "closes": "17:00"
+         },
+         {
+            "day": "Wednesday",
+            "opens": "9:00",
+            "closes": "17:00"
+         },
+         {
+            "day": "Thursday",
+            "opens": "9:00",
+            "closes": "17:00"
+         },
+         {
+            "day": "Friday",
+            "opens": "9:00",
+            "closes": "17:00"
+         },
+         {
+            "day": "Saturday",
+            "opens": "9:00",
+            "closes": "17:00"
+         },
+         {
+            "day": "Sunday",
+            "opens": "9:00",
+            "closes": "17:00"
+         }
+      ]
    },
    {
       "_id": "5f982d5c559aaa35d5e885e4",

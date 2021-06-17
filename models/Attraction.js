@@ -16,55 +16,64 @@ const geocoder = require('../utils/geocoder');
 // family - bool
 
 const OperatingHoursSchema = new mongoose.Schema({
-   dayOfWeek: String,
-   open: Boolean,
-   opens: String,
-   closes: String
+   day: {
+      type: String,
+      enum: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+   },
+   opens: {
+      type: String,
+      default: '10:00'
+   },
+   closes: {
+      type: String,
+      default: '17:00'
+   }
 })
 
 const AttractionSchema = new mongoose.Schema({
    name: {
-     type: String,
-     required: [true, 'Please add a name'],
-     unique: true,
-     trim: true,
-     maxlength: [100, 'Name can not be more than 100 characters']
+      type: String,
+      required: [true, 'Please add a name'],
+      unique: true,
+      trim: true,
+      maxlength: [100, 'Name can not be more than 100 characters']
    },
    slug: String,
    description: {
-     type: String,
-     maxlength: [1000, 'Description cannot be more than 1,000 characters.']
+      type: String,
+      maxlength: [1000, 'Description cannot be more than 1,000 characters.']
    },
    website: {
-     type: String,
-     match: [
-       /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
-       'Please use a valid URL with HTTP or HTTPS'
-     ]
+      type: String,
+      match: [
+         /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
+         'Please use a valid URL with HTTP or HTTPS'
+      ]
    },
    phone: {
-     type: String,
-     maxlength: [20, 'Phone number can not be longer than 20 characters']
+      type: String,
+      maxlength: [20, 'Phone number can not be longer than 20 characters']
    },
    email: {
-     type: String,
-     match: [
-       /^\w+([\.]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-       'Please use a valide email']
+      type: String,
+      match: [
+         /^\w+([\.]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+         'Please use a valide email'
+      ]
    },
    address: {
-     type: String,
-     required: [true, 'Please add address']
+      type: String,
+      required: [true, 'Please add address']
    },
    location: {
       // GeoJSON Point
       type: {
-        type: String,
-        enum: ['Point']
+         type: String,
+         enum: ['Point']
       },
       coordinates: {
-        type: [Number],
-        index: '2dsphere'
+         type: [Number],
+         index: '2dsphere'
       },
       formattedAddress: String,
       street: String,
@@ -72,22 +81,22 @@ const AttractionSchema = new mongoose.Schema({
       state: String,
       zipcode: String,
       country: String
-    },
+   },
    category: {
-     // Array of strings
-     type: [String],
-     required: true,
-     enum: [
-       'winery',
-       'brewery',
-       'distillery',
-       'farm',
-       'parks-trails',
-       'museum',
-       'sports-games',
-       'restaurant',
-       'shopping'
-     ]
+      // Array of strings
+      type: [String],
+      required: true,
+      enum: [
+         'winery',
+         'brewery',
+         'distillery',
+         'farm',
+         'parks-trails',
+         'museum',
+         'sports-games',
+         'restaurant',
+         'shopping'
+      ]
    },
    lake: {
       type: String,
@@ -112,16 +121,16 @@ const AttractionSchema = new mongoose.Schema({
       default: ['no-photo.jpg']
    },
    compassMember: {
-     type: Boolean,
-     default: false
+      type: Boolean,
+      default: false
    },
    sponsored: {
       type: Boolean,
       default: false
    },
    createdAt: {
-     type: Date,
-     default: Date.now
+      type: Date,
+      default: Date.now
    },
    viewCount: {
       type: Number,
@@ -131,86 +140,42 @@ const AttractionSchema = new mongoose.Schema({
       type: Boolean,
       default: false
    },
-   likes: [
-      {
-         type: mongoose.Schema.Types.ObjectId,
-         ref: 'User'
-      }
-   ],
-   bookmarks: [
-      {
-         type: mongoose.Schema.Types.ObjectId,
-         ref: 'users'
-      }
-   ],
+   likes: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+   }],
+   bookmarks: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'users'
+   }],
    user: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',
       required: true,
       default: "5f9ad64912e13f63b848d13e"
    },
-   operatingHours: {
-      type: [OperatingHoursSchema],
-      default: [
-         {
-            dayOfWeek: 'Sunday',
-            open: false,
-            opens: '10:00',
-            closes: '17:00'
-         },
-         {
-            dayOfWeek: 'Monday',
-            open: false,
-            opens: '10:00',
-            closes: '17:00'
-         },
-         {
-            dayOfWeek: 'Tuesday',
-            open: true,
-            opens: '10:00',
-            closes: '17:00'
-         },
-         {
-            dayOfWeek: 'Wednesday',
-            open: true,
-            opens: '10:00',
-            closes: '17:00'
-         },
-         {
-            dayOfWeek: 'Thursday',
-            open: true,
-            opens: '10:00',
-            closes: '17:00'
-         },
-         {
-            dayOfWeek: 'Friday',
-            open: true,
-            opens: '10:00',
-            closes: '17:00'
-         },
-         {
-            dayOfWeek: 'Saturday',
-            open: true,
-            opens: '10:00',
-            closes: '17:00'
-         }
-      ]      
+   operatingHours: [{
+      type: OperatingHoursSchema
+   }]
+}, {
+   toJSON: {
+      virtuals: true
+   },
+   toObject: {
+      virtuals: true
    }
- },
- {
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true }
- }
-);
+});
 
 // create Attraction slug from name
-AttractionSchema.pre('save', function(next) {
-   this.slug = slugify(this.name, { lower: true });
+AttractionSchema.pre('save', function (next) {
+   this.slug = slugify(this.name, {
+      lower: true
+   });
    next();
 });
 
 // Geocoder & create location field
-AttractionSchema.pre('save', async function(next) {
+AttractionSchema.pre('save', async function (next) {
    const loc = await geocoder.geocode(this.address);
    this.location = {
       type: 'Point',
@@ -232,9 +197,13 @@ AttractionSchema.pre('save', async function(next) {
 // Cascade delete products when Attraction is deleted
 AttractionSchema.pre('remove', async function (next) {
    console.log(`Products being removed from attraction ${this._id}`);
-   await this.model('Product').deleteMany({ attraction: this._id });
+   await this.model('Product').deleteMany({
+      attraction: this._id
+   });
    next();
 })
+
+
 
 // Reverse populate with virtuals
 AttractionSchema.virtual('products', {
@@ -243,5 +212,5 @@ AttractionSchema.virtual('products', {
    foreignField: 'attraction',
    justOne: false
 })
- 
+
 module.exports = mongoose.model('Attraction', AttractionSchema);

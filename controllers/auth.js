@@ -122,7 +122,9 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
 // @route   POST /api/v2/auth/forgotpassword
 // @access  Public
 exports.forgotPassword = asyncHandler(async (req, res, next) => {
+   console.log('hitting forgot password'.yellow.bold)
    const user = await User.findOne({ email: req.body.email });
+   console.log(user)
 
    // Check for user
    if(!user){
@@ -131,6 +133,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 
    // Get password reset token
    const resetToken = user.getResetPasswordToken();
+   console.log(resetToken)
 
    await user.save({ validateBeforeSave: false });
 

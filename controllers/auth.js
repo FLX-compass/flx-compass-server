@@ -143,12 +143,12 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
    const message = `Someone has requested to reset your password.  Please go to \n\n ${resetUrl}`;
     
    try {
-      await sgMail.send({
-         to: user.email,
+
+      await sendEmail({
+         email: user.email,
          subject: 'Password reset token',
-         from: process.env.NO_REPLY_EMAIL,
-         text: message
-      });
+         message: message
+      })
       res.status(200).json({ success: true, data: 'Email sent' });
 
    } catch (error) {

@@ -44,7 +44,7 @@ router
 
 router
    .route('/:id')
-   .get(protect, getAttraction)
+   .get(getAttraction)
    .put(protect, authorize('publisher', 'admin'), updateAttraction)
    .delete(protect, authorize('publisher', 'admin'), deleteAttraction);
 

@@ -292,7 +292,7 @@ exports.likeEvent = async (req, res) =>{
     event = await Events
        .findByIdAndUpdate(
           id, 
-          { likes: [...attraction.likes, req.user._id]},
+          { likes: [...event.likes, req.user._id]},
           {
              new: true,
              runValidators: true

@@ -1,0 +1,34 @@
+[
+    {
+        "_id": "5f982d5c559aaa35d5e885a6",
+       "title": "Big Blend",
+       "latitude": 100,
+       "longitude": 100,
+       "description": "some rand description",
+       "startTime": "2021-06-06",
+       "attraction": "5f982d5c559aaa35d5e885e8",
+       "image": "test.jpg",
+       "url": "http://acme.com",
+       "priceLow": 1,
+       "priceHigh": 2,
+       "category": "game",
+       "lake": "Otisco",
+       "source": "Ticketmaster"
+    },
+    {
+        "_id": "5f982d5c559aaa35d5e885c6",
+        "title": "Big Test",
+        "latitude": 101,
+        "longitude": 101,
+        "description": "some rand description",
+        "startTime": "2021-06-06",
+        "attraction": "5f982d5c559aaa35d5e885e8",
+        "image": "test.jpg",
+        "url": "http://acme.com",
+        "priceLow": 1,
+        "priceHigh": 2,
+        "category": "game",
+        "lake": "Otisco",
+        "source": "Ticketmaster"
+     }
+ ]

@@ -10,6 +10,7 @@ dotenv.config({ path: './config/config.env' });
 const Attraction = require('./models/Attraction');
 const Product = require('./models/Product');
 const User = require('./models/User');
+const Event = require('./models/Event');
 
 // Connect to Database
 mongoose.connect(process.env.MONGO_URI, {
@@ -32,12 +33,17 @@ const users = JSON.parse(
    fs.readFileSync(`${__dirname}/_data/users.json`, 'utf-8')
 );
 
+const events = JSON.parse(
+   fs.readFileSync(`${__dirname}/_data/events.json`, 'utf-8')
+);
+
 // Import JSON data into Database
 const importData = async () => {
    try {
       await Attraction.create(attractions);
       await Product.create(products);
       await User.create(users);
+      await Event.create(events)
 
       console.log('Data imported...'.green.inverse);
       process.exit();

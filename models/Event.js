@@ -8,12 +8,21 @@ const EventSchema = new mongoose.Schema(
       trim: true,
       maxlength: [100, "Title can not be more than 100 characters"],
     },
-    latitude: {
-      type: String
-    },
-    longitude: {
-      type: String
-    },
+
+    location: {
+      // GeoJSON Point
+      type: {
+         type: String,
+         enum: ['Point'],
+         default : 'Point'
+      },
+      coordinates: [
+        {
+         type: [Number],
+         index: '2dsphere'
+        }
+      ]
+   },
     description: {
       type: String,
       maxlength: [1000, "Description cannot be more than 1,000 characters."],

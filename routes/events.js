@@ -13,7 +13,8 @@ const {
     unbookmarkEvent,
     likeEvent,
     unlikeEvent,
-    updateEvent
+    updateEvent,
+    getEventsInRadius
 } = require('../controllers/events')
 
 const hpp = require('hpp')
@@ -60,5 +61,8 @@ route('/bookmark/:id')
 router.
 route('/unbookmark/:id')
     .put(protect, authorize('user', 'publisher', 'admin'), unbookmarkEvent)
+
+router.route('/radius/:zipcode/:distance')
+   .get(getEventsInRadius);
 
 module.exports = router;

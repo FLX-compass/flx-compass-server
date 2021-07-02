@@ -2,8 +2,9 @@
     {
         "_id": "5f982d5c559aaa35d5e885a6",
        "title": "Big Blend",
-       "latitude": 100,
-       "longitude": 100,
+       "location" : {
+           "coordinates": [-110.8571443, 32.4586858 ]
+       },
        "description": "some rand description",
        "startTime": "2021-06-06",
        "attraction": "5f982d5c559aaa35d5e885e8",
@@ -18,8 +19,9 @@
     {
         "_id": "5f982d5c559aaa35d5e885c6",
         "title": "Big Test",
-        "latitude": 101,
-        "longitude": 101,
+        "location" : {
+            "coordinates": [-110.8571443, 33.4586858 ]
+        },
         "description": "some rand description",
         "startTime": "2021-06-06",
         "attraction": "5f982d5c559aaa35d5e885e8",

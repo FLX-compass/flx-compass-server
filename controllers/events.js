@@ -65,7 +65,7 @@ exports.getEventByCoordinates = async (req, res, next) => {
     let lat = req.query.lat;
     let long = req.query.long;
 
-    let event = await Events.find({latitude: lat, longitude: long});
+    let event = await Events.find({coordinates: [long, lat]});
     if(!event){
         return next(new ErrorResponse(`No events found at coordinates ${lat}, ${long}`, 404));
     }
@@ -370,3 +370,29 @@ exports.updateEvent = async (req, res, next) => {
       .status(200)
       .json({ success: true, data: event });  
 }
+
+
+exports.getEventsInRadius = async (req, res, next) => {
+   const { zipcode, distance } = req.params;
+   
+   // Get lat/lng from geocoder
+   const loc = await geocoder.geocode(zipcode);
+   const lat =  loc[0].latitude;
+   const lng =  loc[0].longitude;
+
+   // Calc radius in radians
+   // Divide distance by radius of earth
+   // Earth radius 3,963 mi / 6,378 km
+   const radius = distance / 3963;
+
+   const events = await Events.find({
+      location:
+       { $geoWithin: { $centerSphere: coordinates[ [ lng, lat ], radius ] } }
+   });
+
+   res.status(200).json({
+      success: true,
+      count: attractions.length,
+      data: attractions
+   });
+};

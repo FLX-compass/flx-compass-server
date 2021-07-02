@@ -387,12 +387,12 @@ exports.getEventsInRadius = async (req, res, next) => {
 
    const events = await Events.find({
       location:
-       { $geoWithin: { $centerSphere: coordinates[ [ lng, lat ], radius ] } }
+       { $geoWithin: { $centerSphere:[ [ lng, lat ], radius ] } }
    });
 
    res.status(200).json({
       success: true,
-      count: attractions.length,
-      data: attractions
+      count: events.length,
+      data: events
    });
 };

@@ -75,10 +75,12 @@ const AttractionSchema = new mongoose.Schema({
          type: String,
          enum: ['Point']
       },
-      coordinates: {
-         type: [Number],
-         index: '2dsphere'
-      },
+      coordinates: [
+         {
+            type: [Number],
+            index: '2dsphere'
+         }
+      ],
       formattedAddress: String,
       street: String,
       city: String,
@@ -116,8 +118,10 @@ const AttractionSchema = new mongoose.Schema({
          'Honeoye',
          'Candice',
          'Hemlock',
-         'Conesus'
-      ]
+         'Conesus',
+         'Unknown'
+      ],
+      default: 'Unknown'
    },
    avgCost: Number,
    photos: {

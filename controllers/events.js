@@ -14,15 +14,22 @@ const Events = require('../models/Event');
  * @access Public 
  */
 exports.getAllEvents = async (req, res, next) => {
-    let event = await Events.find({});
-    if(!event){
-        return next(new ErrorResponse(`No events found`, 404));
-    }
+   res.status(200).json(res.advancedResults);
+}
 
-    res.json({
-        success: true,
-        data: event
-    })
+exports.getAllEventsWithCategory = async (req, res, next) => {
+   const category = req.params.category
+   let event = await Events.find({
+      category
+   });
+   if (!event) {
+      return next(new ErrorResponse(`No events found with category ${category}`, 404));
+   }
+
+   res.json({
+      success: true,
+      data: event
+   })
 }
 
 /**
@@ -38,16 +45,16 @@ exports.getAllEvents = async (req, res, next) => {
  */
 
 exports.getEventById = async (req, res, next) => {
-    const id = req.params.id;
-    let event = await Events.findById(id);
-    if(!event){
-        return next(new ErrorResponse(`No events found by id ${id}`, 404));
-    }
+   const id = req.params.id;
+   let event = await Events.findById(id);
+   if (!event) {
+      return next(new ErrorResponse(`No events found by id ${id}`, 404));
+   }
 
-    res.json({
-        success: true,
-        data: event
-    })
+   res.json({
+      success: true,
+      data: event
+   })
 }
 
 /**
@@ -62,18 +69,20 @@ exports.getEventById = async (req, res, next) => {
  * @access Public
  */
 exports.getEventByCoordinates = async (req, res, next) => {
-    let lat = req.query.lat;
-    let long = req.query.long;
+   let lat = req.query.lat;
+   let long = req.query.long;
 
-    let event = await Events.find({coordinates: [long, lat]});
-    if(!event){
-        return next(new ErrorResponse(`No events found at coordinates ${lat}, ${long}`, 404));
-    }
+   let event = await Events.find({
+      coordinates: [long, lat]
+   });
+   if (!event) {
+      return next(new ErrorResponse(`No events found at coordinates ${lat}, ${long}`, 404));
+   }
 
-    res.json({
-        success: true,
-        data: event
-    })
+   res.json({
+      success: true,
+      data: event
+   })
 }
 /**
  * 
@@ -88,17 +97,21 @@ exports.getEventByCoordinates = async (req, res, next) => {
  */
 exports.createEvent = async (req, res, next) => {
 
-    let data = req.body;
+   let data = req.body;
 
-    let event = await Events.create(data);
-    if(!event){
-        return next(new ErrorResponse(`No events found at coordinates ${lat}, ${long}`, 404));
-    }
+   try {
+      let event = await Events.create(data);
+      event.save();
+   } catch (err) {
+      return next(new ErrorResponse(`Error happened on creating event\n${err}`, 404));
+   }
 
-    res.status(201).json({
-        success: true,
-        data: event
-    })
+
+
+   res.status(201).json({
+      success: true,
+      data: event
+   })
 }
 
 /**
@@ -111,17 +124,20 @@ exports.createEvent = async (req, res, next) => {
  * @route DELETE /api/v2/event/:id
  * @access Private
  */
-exports.deleteEvent = async(req, res) => {
-    const id = req.params.id;
-    let event = await Events.findById(id);
+exports.deleteEvent = async (req, res) => {
+   const id = req.params.id;
+   let event = await Events.findById(id);
 
-    if(!event){
-        return next(new ErrorResponse(`No events found with id ${id}`, 404));
-    }
+   if (!event) {
+      return next(new ErrorResponse(`No events found with id ${id}`, 404));
+   }
 
-    event.remove()
+   event.remove()
 
-    res.json({success: true, data: {}})
+   res.json({
+      success: true,
+      data: {}
+   })
 }
 
 /**
@@ -136,211 +152,267 @@ exports.deleteEvent = async(req, res) => {
  * @access Private
  */
 exports.eventPhotoUpload = async (req, res, next) => {
-    const id = req.params.id;
-    const event = await Events.findById(id);
-    if(!event) {
-       return next(new ErrorResponse(`Event not found with ID of ${req.params.id}`, 404));
-    }
- 
-    
-    if(!req.files) {
-       return next(
-          new ErrorResponse(`Please upload a file`, 400)
-       );
-    }
-    const file = req.files.file;
- 
-    // Image validation
-    if(!file.mimetype.startsWith('image')) {
-       return next(new ErrorResponse('Please upload an image file.', 400))
-    }
- 
-    // Check file size
-    if(file.size > process.env.MAX_FILE_UPLOAD) {
-       return next(new ErrorResponse(`Please upload an image file size less than ${process.env.MAX_FILE_UPLOAD}.`, 400))
-    }
- 
- 
-    let photos = event.photos;
- 
-    console.log("photos[0]", photos[0]);
- 
-    photos = photos? photos.length === 1 && photos[0] === 'no-photo.jpg'? [] : photos: [];
- 
-    // Create custom filename
-    file.name = `photo_${attraction._id}_${photos.length+1}${path.parse(file.name).ext}`;
- 
-    // Move to uploads folder
-    file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async err => {
-       if(err) {
-          console.error(err);
-          return next(
-             new ErrorResponse(`Problem with file upload`, 500)
-          );
-       }
-    
-    // check if photos array is default array or empty. if the value is default array or undefined, set it to []
-    // add photo
- 
-    await Events.findByIdAndUpdate(id, { photos: [...photos, file.name] });
- 
-    res.status(200).json({
-       success: true,
-       data: file.name
-    })
-    });
- };
+   const id = req.params.id;
+   let event
 
- /**
-  * 
-  * @param {*} req 
-  * @param {*} res 
-  * @returns 
-  * @desc Bookmark event
-  * @route PUT /api/v2/event/bookmark/:id
-  * @access Private
-  */
- exports.bookmarkEvent = async (req, res) =>{
-    let event = await Events.findById(req.params.id);
+   try {
+      event = await Events.findById(id);
+      if (!event) {
+         return next(new ErrorResponse(`Event not found with ID of ${req.params.id}`, 404));
+      }
+   }catch(err){
+      return next(new ErrorResponse(`Error on finding event ${err}`, 404));
+   }
 
-    // check for attraction
-    if(!event) {
-       return next(new ErrorResponse(`Event not found with ID of ${req.params.id}`, 404));
-    }
- 
-    // Check if the post has already been bookmarked
-    if(event.bookmarks.filter(bookmark => bookmark.toString() === req.user._id.toString()).length > 0) {
-       return next(new ErrorResponse(`Event already bookmarked`, 404));
-    }
- 
-    // Update
-    event = await Events
-       .findByIdAndUpdate(
-          req.params.id, 
-          { bookmarks: [...event.bookmarks, req.user._id]},
-          {
-             new: true,
-             runValidators: true
-          });
- 
-    res
-       .status(200)
-       .json({ success: true, data: event.bookmarks });
- }
+   if (!req.files) {
+      return next(
+         new ErrorResponse(`Please upload a file`, 400)
+      );
+   }
+   const file = req.files.file;
+
+   // Image validation
+   if (!file.mimetype.startsWith('image')) {
+      return next(new ErrorResponse('Please upload an image file.', 400))
+   }
+
+   // Check file size
+   if (file.size > process.env.MAX_FILE_UPLOAD) {
+      return next(new ErrorResponse(`Please upload an image file size less than ${process.env.MAX_FILE_UPLOAD}.`, 400))
+   }
 
 
-  /**
-  * 
-  * @param {*} req 
-  * @param {*} res 
-  * @returns 
-  * @desc Unbookmark event
-  * @route PUT /api/v2/event/unbookmark/:id
-  * @access Private
-  */
- exports.unbookmarkEvent = async (req, res) =>{
-    const id = req.params.id;
-    let event = await Events.findById(id);
+   let photos = event.photos;
 
-    // check for attraction
-    if(!event) {
-       return next(new ErrorResponse(`Event not found with ID of ${req.params.id}`, 404));
-    }
- 
- 
-    // Update
-    event = await Events
-       .findByIdAndUpdate(
-          id, 
-          { bookmarks: event.bookmarks.filter(
-             bookmark => bookmark.toString() !== req.user._id.toString())},
-          {
-             new: true,
-             runValidators: true
-          });
- 
-    res
-       .status(200)
-       .json({ success: true, data: event.bookmarks });
+   console.log("photos[0]", photos[0]);
+
+   photos = photos ? photos.length === 1 && photos[0] === 'no-photo.jpg' ? [] : photos : [];
+
+   // Create custom filename
+   file.name = `photo_${attraction._id}_${photos.length+1}${path.parse(file.name).ext}`;
+
+   // Move to uploads folder
+   file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async err => {
+      if (err) {
+         console.error(err);
+         return next(
+            new ErrorResponse(`Problem with file upload`, 500)
+         );
+      }
+
+      // check if photos array is default array or empty. if the value is default array or undefined, set it to []
+      // add photo
+
+      await Events.findByIdAndUpdate(id, {
+         photos: [...photos, file.name]
+      });
+
+      res.status(200).json({
+         success: true,
+         data: file.name
+      })
+   });
+};
+
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ * @desc Bookmark event
+ * @route PUT /api/v2/event/bookmark/:id
+ * @access Private
+ */
+exports.bookmarkEvent = async (req, res, next) => {
+   let event
+   try {
+      event = await Events.findById(req.params.id);
+      if (!event) {
+         return next(new ErrorResponse(`Event not found with ID of ${req.params.id}`, 404));
+      }
+   } catch (err) {
+      return next(new ErrorResponse(`Error happened on event find ${err}`, 404));
+   }
+
+
+   // Check if the post has already been bookmarked
+   if (event.bookmarks.filter(bookmark => bookmark.toString() === req.user._id.toString()).length > 0) {
+      return next(new ErrorResponse(`Event already bookmarked`, 404));
+   }
+
+   // Update
+   try {
+      event = await Events
+         .findByIdAndUpdate(
+            req.params.id, {
+               bookmarks: [...event.bookmarks, req.user._id]
+            }, {
+               new: true,
+               runValidators: true
+            });
+   } catch (err) {
+      return next(new ErrorResponse(`Error happened on updating event ${err}`, 404));
+   }
+
+   res
+      .status(200)
+      .json({
+         success: true,
+         data: event.bookmarks
+      });
+}
+
+
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ * @desc Unbookmark event
+ * @route PUT /api/v2/event/unbookmark/:id
+ * @access Private
+ */
+exports.unbookmarkEvent = async (req, res, next) => {
+   const id = req.params.id;
+   let event
+
+   try {
+      event = await Events.findById(id);
+
+      if (!event) {
+         return next(new ErrorResponse(`Event not found with ID of ${req.params.id}`, 404));
+      }
+   } catch (err) {
+      return next(new ErrorResponse(`Error on finding event ${err}`, 404));
+   }
+
+
+
+   // Update
+
+   try {
+      event = await Events
+         .findByIdAndUpdate(
+            id, {
+               bookmarks: event.bookmarks.filter(
+                  bookmark => bookmark.toString() !== req.user._id.toString())
+            }, {
+               new: true,
+               runValidators: true
+            });
+   } catch (err) {
+      return next(new ErrorResponse(`Error on updating event ${err}`, 404));
+   }
+
+
+   res
+      .status(200)
+      .json({
+         success: true,
+         data: event.bookmarks
+      });
 
 }
 
- /**
-  * 
-  * @param {*} req 
-  * @param {*} res 
-  * @returns 
-  * @desc Like event
-  * @route PUT /api/v2/event/like/:id
-  * @access Private
-  */
-exports.likeEvent = async (req, res) =>{
-    const id = req.params.id;
-    let event = await Events.findById(id);
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ * @desc Like event
+ * @route PUT /api/v2/event/like/:id
+ * @access Private
+ */
+exports.likeEvent = async (req, res, next) => {
+   const id = req.params.id;
+   let event
 
-    
-    if(!event) {
-       return next(new ErrorResponse(`Event not found with ID of ${req.params.id}`, 404));
-    }
- 
-    // Check if the post has already been liked
-    if(event.likes.filter(like => like.toString() === req.user._id.toString()).length > 0) {
-       return next(new ErrorResponse(`Event already liked`, 404));
-    }
- 
-    // Update
-    event = await Events
-       .findByIdAndUpdate(
-          id, 
-          { likes: [...event.likes, req.user._id]},
-          {
-             new: true,
-             runValidators: true
-          });
- 
-    res
-       .status(200)
-       .json({ success: true, data: event.likes });
+   try {
+      event = await Events.findById(id);
+      if (!event) {
+         return next(new ErrorResponse(`Event not found with ID of ${req.params.id}`, 404));
+      }
+   } catch (err) {
+      return next(new ErrorResponse(`Error happened on finding event\n${err}`, 404));
+   }
+
+
+   // Check if the post has already been liked
+   if (event.likes.filter(like => like.toString() === req.user._id.toString()).length > 0) {
+      return next(new ErrorResponse(`Event already liked`, 404));
+   }
+
+   // Update
+   try {
+      event = await Events
+         .findByIdAndUpdate(
+            id, {
+               likes: [...event.likes, req.user._id]
+            }, {
+               new: true,
+               runValidators: true
+            });
+   } catch (err) {
+      return next(new ErrorResponse(`Could not update like event\n${err}`, 404));
+   }
+
+
+   res
+      .status(200)
+      .json({
+         success: true,
+         data: event.likes
+      });
 
 }
 
- /**
-  * 
-  * @param {*} req 
-  * @param {*} res 
-  * @returns 
-  * @desc Unlike event
-  * @route PUT /api/v2/event/unlike/:id
-  * @access Private
-  */
-exports.unlikeEvent = async (req, res) =>{
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ * @desc Unlike event
+ * @route PUT /api/v2/event/unlike/:id
+ * @access Private
+ */
+exports.unlikeEvent = async (req, res, next) => {
 
-    const id = req.params.id
+   const id = req.params.id
+   let event
 
-    let event = await Events.findById(id);
+   try {
+      event = await Events.findById(id);
+      if (!event) {
+         return next(new ErrorResponse(`Event not found with ID of ${req.params.id}`, 404));
+      }
+   } catch (err) {
+      return next(new ErrorResponse(`Error happened on finding event \n ${err}`, 404));
+   }
 
-    // check for attraction
-    if(!event) {
-       return next(new ErrorResponse(`Event not found with ID of ${req.params.id}`, 404));
-    }
- 
-    // Update
-    event = await Events
-       .findByIdAndUpdate(
-          id, 
-          {
-             likes: event.likes.filter(
-                like => like.toString() !== req.user._id.toString()
-             )
-          },
-          {
-             new: true,
-             runValidators: true
-          });
- 
-    res
-       .status(200)
-       .json({ success: true, data: event.likes });  
+
+   // Update
+   try {
+      event = await Events
+         .findByIdAndUpdate(
+            id, {
+               likes: event.likes.filter(
+                  like => like.toString() !== req.user._id.toString()
+               )
+            }, {
+               new: true,
+               runValidators: true
+            });
+   } catch (err) {
+      return next(new ErrorResponse(`Error happened updateing event ${err} \n ${err}`, 404));
+   }
+
+
+   res
+      .status(200)
+      .json({
+         success: true,
+         data: event.likes
+      });
 }
 
 /**
@@ -354,31 +426,46 @@ exports.unlikeEvent = async (req, res) =>{
  */
 exports.updateEvent = async (req, res, next) => {
    const id = req.params.id;
-   let event = await Events.findById(id);
+   let event
 
-   
-   if(!event) {
-      return next(new ErrorResponse(`Event not found with ID of ${id}`, 404));
+   try {
+      event = await Events.findById(id);
+      if (!event) {
+         return next(new ErrorResponse(`Event not found with ID of ${id}`, 404));
+      }
+   } catch (err) {
+      return next(new ErrorResponse(`Error on finding event ${err}`, 404));
    }
 
-   event = await Events.findByIdAndUpdate(id, req.body, {
-      new: true,
-      runValidators: true
-   });
+
+   try {
+      event = await Events.findByIdAndUpdate(id, req.body, {
+         new: true,
+         runValidators: true
+      });
+   } catch (err) {
+      return next(new ErrorResponse(`Error happened on even update\n${errpr}`, 404));
+   }
 
    res
       .status(200)
-      .json({ success: true, data: event });  
+      .json({
+         success: true,
+         data: event
+      });
 }
 
 
 exports.getEventsInRadius = async (req, res, next) => {
-   const { zipcode, distance } = req.params;
-   
+   const {
+      zipcode,
+      distance
+   } = req.params;
+
    // Get lat/lng from geocoder
    const loc = await geocoder.geocode(zipcode);
-   const lat =  loc[0].latitude;
-   const lng =  loc[0].longitude;
+   const lat = loc[0].latitude;
+   const lng = loc[0].longitude;
 
    // Calc radius in radians
    // Divide distance by radius of earth
@@ -386,8 +473,13 @@ exports.getEventsInRadius = async (req, res, next) => {
    const radius = distance / 3963;
 
    const events = await Events.find({
-      location:
-       { $geoWithin: { $centerSphere:[ [ lng, lat ], radius ] } }
+      location: {
+         $geoWithin: {
+            $centerSphere: [
+               [lng, lat], radius
+            ]
+         }
+      }
    });
 
    res.status(200).json({

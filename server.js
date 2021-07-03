@@ -21,6 +21,7 @@ const products = require('./routes/products');
 const auth = require('./routes/auth');
 const users = require('./routes/users');
 const events = require('./routes/events');
+const webhook = require('./routes/webhook')
 
 // Load envirement files
 dotenv.config({ path: './config/config.env' });
@@ -77,6 +78,7 @@ app.use('/api/v2/products', products);
 app.use('/api/v2/auth', auth);
 app.use('/api/v2/users', users);
 app.use('/api/v2/events', events);
+app.use('/api/v2/webhook', webhook);
 
 app.use(errorHandler);
 

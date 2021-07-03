@@ -4,6 +4,7 @@ const router = express.Router({
 });
 const {
     getAllEvents,
+    getAllEventsWithCategory,
     getEventByCoordinates,
     getEventById,
     createEvent,
@@ -13,11 +14,14 @@ const {
     unbookmarkEvent,
     likeEvent,
     unlikeEvent,
-    updateEvent,
-    getEventsInRadius
+    updateEvent
 } = require('../controllers/events')
 
+const Event = require('../models/Event');
+
 const hpp = require('hpp')
+
+const advancedResults = require('../middleware/advancedResults');
 
 const {
     protect,
@@ -26,11 +30,15 @@ const {
 
 router.
 route('/getAll')
-    .get(getAllEvents)
+    .get(advancedResults(Event,'product'),getAllEvents)
+
+router.
+route('getAllCategory/:category')
+    .get(getAllEventsWithCategory)
 
 router.
 route('/:id')
-    .get(protect, authorize('publisher', 'admin'), getEventById)
+    .get(getEventById)
     .put(protect, authorize('publisher', 'admin'), updateEvent)
     .delete(protect, authorize('publisher', 'admin'), deleteEvent)
 router.
@@ -40,10 +48,10 @@ route('/getByCoords')
 router.
 route('/create')
     .post(protect, authorize('publisher', 'admin'), createEvent)
-    
+
 
 router.
-route('/updatePhoto')
+route('/updatePhoto/:id')
     .put(protect, authorize('publisher', 'admin'), eventPhotoUpload)
 
 router.
@@ -62,7 +70,7 @@ router.
 route('/unbookmark/:id')
     .put(protect, authorize('user', 'publisher', 'admin'), unbookmarkEvent)
 
-router.route('/radius/:zipcode/:distance')
-   .get(getEventsInRadius);
+// router.route('/radius/:zipcode/:distance')
+//     .get(getEventsInRadius);
 
 module.exports = router;

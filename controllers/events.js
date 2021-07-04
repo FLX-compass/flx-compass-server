@@ -35,6 +35,7 @@ exports.getAllEventsWithCategory = async (req, res, next) => {
 
    res.json({
       success: true,
+      count: event.length,
       data: event
    })
 }
@@ -283,6 +284,7 @@ exports.bookmarkEvent = async (req, res, next) => {
       .status(200)
       .json({
          success: true,
+         count: event.bookmark.length,
          data: event.bookmarks
       });
 }
@@ -334,6 +336,7 @@ exports.unbookmarkEvent = async (req, res, next) => {
       .status(200)
       .json({
          success: true,
+         count: event.bookmark.length,
          data: event.bookmarks
       });
 
@@ -386,6 +389,7 @@ exports.likeEvent = async (req, res, next) => {
       .status(200)
       .json({
          success: true,
+         count: event.likes.length,
          data: event.likes
       });
 
@@ -436,6 +440,7 @@ exports.unlikeEvent = async (req, res, next) => {
       .status(200)
       .json({
          success: true,
+         count: event.likes.length,
          data: event.likes
       });
 }
@@ -476,6 +481,7 @@ exports.updateEvent = async (req, res, next) => {
       .status(200)
       .json({
          success: true,
+         count: event.length,
          data: event
       });
 }

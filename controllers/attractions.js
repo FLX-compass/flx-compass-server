@@ -347,3 +347,36 @@ exports.unBookmarkAttraction = asyncHandler(async (req, res, next) => {
       .status(200)
       .json({ success: true, data: attraction.bookmarks });   
 });
+
+
+
+exports.getAttractionsInRadiusWithLongLat = async (req, res, next) => {
+   const {
+      radius,
+      lat,
+      lng
+   } = req.params;
+   let attractions;
+
+   try {
+      attractions = await Attraction.find({
+         location: {
+            $geoWithin: {
+               $centerSphere: [
+                  [lng, lat], radius
+               ]
+            }
+         }
+      });
+   }catch(err){
+      return next(new ErrorResponse(`Error on finding attraction ${err}`, 404));
+   }
+
+
+
+   res.status(200).json({
+      success: true,
+      count: attractions.length,
+      data: attractions
+   });
+};

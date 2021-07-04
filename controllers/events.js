@@ -487,7 +487,7 @@ exports.updateEvent = async (req, res, next) => {
 }
 
 
-exports.getEventsInRadius = async (req, res, next) => {
+exports.getEventsInRadiusWithZip = async (req, res, next) => {
    const {
       zipcode,
       distance
@@ -512,6 +512,37 @@ exports.getEventsInRadius = async (req, res, next) => {
          }
       }
    });
+
+   res.status(200).json({
+      success: true,
+      count: events.length,
+      data: events
+   });
+};
+
+exports.getEventsInRadiusWithLongLat = async (req, res, next) => {
+   const {
+      radius,
+      lat,
+      lng
+   } = req.params;
+   let events;
+
+   try {
+      events = await Events.find({
+         location: {
+            $geoWithin: {
+               $centerSphere: [
+                  [lng, lat], radius
+               ]
+            }
+         }
+      });
+   }catch(err){
+      return next(new ErrorResponse(`Error on finding event ${err}`, 404));
+   }
+
+
 
    res.status(200).json({
       success: true,

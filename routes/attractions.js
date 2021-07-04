@@ -12,7 +12,8 @@ const {
    likeAttraction,
    bookmarkAttraction,
    unLikeAttraction,
-   unBookmarkAttraction
+   unBookmarkAttraction,
+   getAttractionsInRadiusWithLongLat
 } = require('../controllers/attractions');
 
 const Attraction = require('../models/Attraction');
@@ -30,7 +31,7 @@ const { protect, authorize } = require('../middleware/auth');
 // Re-route into other resource routers
 router.use('/:attractionId/products', protect, productRouter);
 
-router.route('/radius/:zipcode/:distance')
+router.route('/radiusZip/:zipcode/:distance')
    .get(getAttractionsInRadius);
 
 router
@@ -63,5 +64,9 @@ router
 router
    .route('/unbookmark/:id')
    .put(protect, authorize('user', 'publisher', 'admin'), unBookmarkAttraction);
+
+router.
+   route('/radius/:lng/:lat/:zip')
+      .get(getAttractionsInRadiusWithLongLat)
 
 module.exports = router;

@@ -14,7 +14,9 @@ const {
     unbookmarkEvent,
     likeEvent,
     unlikeEvent,
-    updateEvent
+    updateEvent,
+    getEventsInRadiusWithZip,
+    getEventsInRadiusWithLongLat
 } = require('../controllers/events')
 
 const Event = require('../models/Event');
@@ -70,7 +72,12 @@ router.
 route('/unbookmark/:id')
     .put(protect, authorize('user', 'publisher', 'admin'), unbookmarkEvent)
 
-// router.route('/radius/:zipcode/:distance')
-//     .get(getEventsInRadius);
+router.
+route('/radiusZip/:zipcode/:distance')
+    .get(getEventsInRadiusWithZip);
+
+router.
+route('/radius/:lng/:lat/:zip')
+    .get(getEventsInRadiusWithLongLat);
 
 module.exports = router;

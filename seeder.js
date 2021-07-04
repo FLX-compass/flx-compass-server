@@ -58,6 +58,7 @@ const deleteData = async() => {
       await Attraction.deleteMany();
       await Product.deleteMany();
       await User.deleteMany();
+      await Event.deleteMany();
 
       console.log('Data destroyed...'.red.inverse);
       process.exit(); 

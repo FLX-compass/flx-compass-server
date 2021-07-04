@@ -19,12 +19,19 @@ exports.getAllEvents = async (req, res, next) => {
 
 exports.getAllEventsWithCategory = async (req, res, next) => {
    const category = req.params.category
-   let event = await Events.find({
-      category
-   });
-   if (!event) {
-      return next(new ErrorResponse(`No events found with category ${category}`, 404));
+   let event
+
+   try{
+      event = await Events.find({
+         category
+      });
+      if (!event) {
+         return next(new ErrorResponse(`No events found with category ${category}`, 404));
+      }
+   }catch(err){
+      return next(new ErrorResponse(`Error on finding event with category ${category}`, 404));
    }
+
 
    res.json({
       success: true,
@@ -46,10 +53,17 @@ exports.getAllEventsWithCategory = async (req, res, next) => {
 
 exports.getEventById = async (req, res, next) => {
    const id = req.params.id;
-   let event = await Events.findById(id);
-   if (!event) {
-      return next(new ErrorResponse(`No events found by id ${id}`, 404));
+   let event
+
+   try{
+      event = await Events.findById(id);
+      if (!event) {
+         return next(new ErrorResponse(`No events found by id ${id}`, 404));
+      }
+   }catch(err){
+      return next(new ErrorResponse(`Error on finding event with id ${id}`, 404));
    }
+
 
    res.json({
       success: true,
@@ -71,12 +85,17 @@ exports.getEventById = async (req, res, next) => {
 exports.getEventByCoordinates = async (req, res, next) => {
    let lat = req.query.lat;
    let long = req.query.long;
+   let event
 
-   let event = await Events.find({
-      coordinates: [long, lat]
-   });
-   if (!event) {
-      return next(new ErrorResponse(`No events found at coordinates ${lat}, ${long}`, 404));
+   try{
+      event = await Events.find({
+         coordinates: [long, lat]
+      });
+      if (!event) {
+         return next(new ErrorResponse(`No events found at coordinates ${lat}, ${long}`, 404));
+      }
+   }catch(err){
+      return next(new ErrorResponse(`Error on finding event at coordinates ${lat}, ${long}`, 404));
    }
 
    res.json({
@@ -98,15 +117,14 @@ exports.getEventByCoordinates = async (req, res, next) => {
 exports.createEvent = async (req, res, next) => {
 
    let data = req.body;
+   let event
 
    try {
-      let event = await Events.create(data);
+      event = await Events.create(data);
       event.save();
    } catch (err) {
       return next(new ErrorResponse(`Error happened on creating event\n${err}`, 404));
    }
-
-
 
    res.status(201).json({
       success: true,
@@ -124,13 +142,20 @@ exports.createEvent = async (req, res, next) => {
  * @route DELETE /api/v2/event/:id
  * @access Private
  */
-exports.deleteEvent = async (req, res) => {
+exports.deleteEvent = async (req, res, next) => {
    const id = req.params.id;
-   let event = await Events.findById(id);
-
-   if (!event) {
-      return next(new ErrorResponse(`No events found with id ${id}`, 404));
+   let event
+   try {
+      event = await Events.findById(id);
+      if (!event) {
+         return next(new ErrorResponse(`No events found with id ${id}`, 404));
+      }
+   }catch(err){
+      
    }
+   
+
+
 
    event.remove()
 

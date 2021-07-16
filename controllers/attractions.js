@@ -160,16 +160,23 @@ exports.getAttractionsInRadius = asyncHandler(async (req, res, next) => {
 // @route   PUT /api/v2/attractions/:id/photo
 // @access  Private
 exports.attractionPhotoUpload = asyncHandler(async (req, res, next) => {
-   const attraction = await Attraction.findById(req.params.id);
+   const id = req.params.id
+   let attraction
+   try {
+      attraction = await Attraction.findById(id).exec();
+   }catch(err){
+      return next(new ErrorResponse(`Error on finding attraction with error ${err}`))
+   }
+   
    if(!attraction) {
       return next(new ErrorResponse(`Attraction not found with ID of ${req.params.id}`, 404));
    }
 
    // Make sure user has proper permissions
    
-   if(attraction.user.toString() !== req.user._id.toString() && req.user.role !== 'admin'){
-      return next(new ErrorResponse(`User ${req.user.id} is not authorized to add a photo to this attraction`, 404));
-   }
+   // if(attraction.user.toString() !== req.user._id.toString() && req.user.role !== 'admin'){
+   //    return next(new ErrorResponse(`User ${req.user.id} is not authorized to add a photo to this attraction`, 404));
+   // }
    
    if(!req.files) {
       return next(
@@ -210,7 +217,7 @@ exports.attractionPhotoUpload = asyncHandler(async (req, res, next) => {
    // check if photos array is default array or empty. if the value is default array or undefined, set it to []
    // add photo
 
-   await Attraction.findByIdAndUpdate(req.params.id, { photos: [...photos, file.name] });
+   await Attraction.findByIdAndUpdate(id, { photos: [...photos, file.name] });
 
    res.status(200).json({
       success: true,

@@ -20,18 +20,20 @@ const EventSchema = new mongoose.Schema(
       required: true,
       default: Date.now,
     },
-    attraction: {
+    attraction: [{
       type: mongoose.Schema.ObjectId,
       ref: "Attraction",
       required: true,
-    },
+    }],
     organizer: {
       type: String,
     },
-    image: {
+    image: 
+      {
       type: [String],
       required: true,
-    },
+      default: 'no-image.png'
+      }  ,
     sponsored: {
       type: Boolean,
       required: true,

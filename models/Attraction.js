@@ -21,12 +21,10 @@ const OperatingHoursSchema = new mongoose.Schema({
       enum: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
    },
    opens: {
-      type: String,
-      default: '10:00'
+      type: String
    },
    closes: {
-      type: String,
-      default: '17:00'
+      type: String
    },
    isOpen: {
       type: Boolean,
@@ -38,7 +36,6 @@ const AttractionSchema = new mongoose.Schema({
    name: {
       type: String,
       required: [true, 'Please add a name'],
-      unique: true,
       trim: true,
       maxlength: [100, 'Name can not be more than 100 characters']
    },
@@ -101,8 +98,10 @@ const AttractionSchema = new mongoose.Schema({
          'museum',
          'sports-games',
          'restaurant',
-         'shopping'
-      ]
+         'shopping',
+         'unknown'
+      ],
+      defautl : 'unknown'
    },
    lake: {
       type: String,
@@ -125,8 +124,8 @@ const AttractionSchema = new mongoose.Schema({
    },
    avgCost: Number,
    photos: {
-      type: Array,
-      default: ['no-photo.jpg']
+      type: [String],
+      default: 'no-photo.jpg'
    },
    compassMember: {
       type: Boolean,
@@ -156,6 +155,10 @@ const AttractionSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'users'
    }],
+   ticketmasterID: {
+      type: String,
+      index: true
+   },
    user: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',

@@ -208,14 +208,14 @@ exports.eventPhotoUpload = async (req, res, next) => {
    }
 
 
-   let photos = event.photos;
+   let photos = event.images || [];
 
-   console.log("photos[0]", photos[0]);
+   console.log("photos[0]", photos);
 
    photos = photos ? photos.length === 1 && photos[0] === 'no-photo.jpg' ? [] : photos : [];
 
    // Create custom filename
-   file.name = `photo_${attraction._id}_${photos.length+1}${path.parse(file.name).ext}`;
+   file.name = `photo_${event._id}_${photos.length+1}${path.parse(file.name).ext}`;
 
    // Move to uploads folder
    file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async err => {
@@ -230,7 +230,7 @@ exports.eventPhotoUpload = async (req, res, next) => {
       // add photo
 
       await Events.findByIdAndUpdate(id, {
-         photos: [...photos, file.name]
+         image: [...photos, file.name]
       });
 
       res.status(200).json({

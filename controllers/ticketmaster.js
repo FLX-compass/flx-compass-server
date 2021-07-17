@@ -18,20 +18,7 @@ const {
 const pipeline = promisify(stream.pipeline);
 
 const TICKETMASTER_KEY = process.env.TICKETMASTER_KEY;
-
-//FILL UP REST ZIP CODES, THIS ONES ARE FOR TESTING PURPOSES
-// const ZIP_CODES = [
-//     '14410',
-//     '14801',
-//     '14413',
-//     '14805',
-//     '13732'
-// ]
-
-const ZIP_CODES = [
-    '1',
-]
-
+const ZIPCODE_FILE = path.resolve(__dirname, '../_data/zipcodes.json')
 /**
  * 
  * @param {*} req 
@@ -43,7 +30,10 @@ const ZIP_CODES = [
 //{"_links":{"self":{"href":"=*"}},"page":{"size":200,"totalElements":0,"totalPages":0,"number":0}}
 
 exports.searchEvents = async (req, res, next) => {
-    let resData = [];
+
+    const rawData = fs.readFileSync(ZIPCODE_FILE);
+    const zipCodeData = JSON.parse(rawData);
+    const ZIP_CODES = zipCodeData.zipCodes;
     moment.updateLocale('en', {
         week: {
             dow: 1,
@@ -55,6 +45,7 @@ exports.searchEvents = async (req, res, next) => {
     console.log(`${startOfTheWeek} - ${endOfTheWeek}`)
     //max is 200 items per page
     let dataSize = 200
+    let resData = [];
     for (let element in ZIP_CODES) {
         console.log(`parsed zip code ${ZIP_CODES[element]}`);
 
@@ -76,18 +67,23 @@ exports.searchEvents = async (req, res, next) => {
 
         const countData = parsePage(body);
         if (countData.totalElements === 0) {
+            
             console.log(`countdata is ${countData}`)
             resData.push({
                 zipCode: ZIP_CODES[element],
                 message: `No data for ${ZIP_CODES[element]} for dates ${startOfTheWeek} - ${endOfTheWeek}`
             })
         } else {
-            await parseEvent(body["_embedded"]["events"]);
+            try {
+                await parseEvent(body["_embedded"]["events"]);
+                res.json({success: true})
+            }catch(error){
+                res.json({success: false, error})
+            }
+            
         }
     };
-
-    console.log('hitting res')
-    res.json(resData)
+    return res.json(resData)
 
 
 }
@@ -115,11 +111,13 @@ async function parseEvent(eventsData) {
                     url: image.url,
                     height: image.height,
                     width: image.width
-                })
+                });
                 if (!event.image) {
                     event.image = []
                 }
-                event.image.push(savedImage)
+                if (savedImage != null) {
+                    event.image.push(savedImage)
+                }
             })).catch(err => {
                 console.log(err)
             })
@@ -127,15 +125,12 @@ async function parseEvent(eventsData) {
 
         try {
             await event.save();
-            console.log(`got event id ${event._id}`)
         } catch (err) {
             console.log(`error on event save occured\n${err}`)
         }
 
-
-
-        await Promise.all(data["_embedded"]["venues"].map(async venue => {
-            await parseAttraction(venue, event._id)
+        Promise.all(data["_embedded"]["venues"].map(async venue => {
+            await parseAttraction(venue, event.id);
         })).catch(err => {
             console.log(`error on parse attraction occured:\$${err}`)
         })
@@ -150,13 +145,12 @@ async function parseAttraction(data, eventID) {
     try {
         attraction = await Attraction.findOne({
             ticketMasterID: data.id
-        }).exec()
+        }).exec();
     } catch (err) {
         console.log(`error on finding attraction with ticketmaster id: ${data.id}, reason:\n${err}`)
     }
 
     if (!attraction) {
-        console.log(`no attraction found`)
         attraction = new Attraction({
             name: (data.name ? data.name : 'No Name'),
             ticketMasterID: data.id,
@@ -173,32 +167,40 @@ async function parseAttraction(data, eventID) {
             }
         })
 
-        if (data.images) {
-            await data.images.map(async imageData => {
+        if (Array.isArray(data.images) && data.images !== undefined) {
+            Promise.all(data.images.map(async imageData => {
+                console.log(`passing url from attraction ${imageData.url}`)
                 let savedPath = await imageParser({
                     url: imageData.url,
                     width: imageData.width,
                     height: imageData.height
                 })
-                console.log(savedPath)
-                attraction.photos.push({
-                    savedPath
-                })
-            })
 
+                if(savedPath){
+                    
+                    attraction.photos.push({
+                        savedPath
+                    })
+                }
+            }))
 
-            try {
-                await attraction.save();
-            } catch (err) {
-                console.log(`error on save attraction:\n${err}`)
-            }
+        }else {
+            console.log(`data image is not array its ${typeof(data.images)}, ${data.images}`)
+        }
+
+        try {
+            await attraction.save();
+        } catch (err) {
+            console.log(`error on save attraction:\n${err}`)
         }
     }
-    try {
 
+    try {
         let event = await Event.findById(eventID).exec()
-        event.attraction.push(attraction.id);
-        await event.save()
+        if (event) {
+            event.attraction.push(attraction.id);
+            await event.save();
+        }
     } catch (err) {
         console.log(`error on finding or saving event, reason:\n${err}`)
     }
@@ -211,14 +213,17 @@ async function imageParser(opts) {
         height
     } = opts;
     const filename = url.match(/[\w\.\$]+(?=png|jpg|jpeg)\w+/g);
-    let saveFilePath = path.resolve(`${process.env.FILE_UPLOAD_PATH}/${filename}`);
-    console.log(`save path is ${saveFilePath}`)
-    return pipeline(
-            got.stream(url),
-            fs.createWriteStream(saveFilePath)).then(() => {
-                return saveFilePath
-            })
-    
+    let saveFilePath = path.resolve(`${process.env.FILE_UPLOAD_PATH}/${filename[0]}`);
+    try {
+        let response = await got.get(url);
+        if (response.statusCode !== 200) {
+            return null
+        }
+        fs.writeFileSync(saveFilePath, response.body)
+        return filename[0];
+    }catch(error) {
+        console.log(`error on request \n${error}`)
+    }
 }
 
 function parsePage(data) {

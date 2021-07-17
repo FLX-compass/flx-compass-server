@@ -24,6 +24,18 @@ npm run dev
 npm start
 ```
 
+##NOTES ON TICKETMASTER WEBHOOK
+
+As presented, you have cron.sh file you can use to add into your crontab that your machine will execute weekly and call
+ticketmaster url to fetch weekly data.
+Follow tutorial how to add cron.sh to be executed weekly on [this url](https://help.ubuntu.com/community/CronHowto)
+
+If you want to invoke your own webhook manually you can call [curl localhost:5000/api/v2/webhook/ticketmaster](curl localhost:5000/api/v2/webhook/ticketmaster)
+
+Webhook does automaticly calculate start and end of the current week (monday to sunday), and does read zip codes from _data/zipcodes.json file, and parses and fills data accordingly.
+
+If you want more data to be parsed, fill in zipcodes.json to be read out.
+
 
 ## Notes
 JWT secret is password for https://jwt.io/

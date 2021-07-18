@@ -168,7 +168,6 @@ async function parseAttraction(data, eventID) {
 
         if (Array.isArray(data.images) && data.images !== undefined) {
             Promise.all(data.images.map(async imageData => {
-                console.log(`passing url from attraction ${imageData.url}`)
                 let savedPath = await imageParser({
                     url: imageData.url,
                     width: imageData.width,

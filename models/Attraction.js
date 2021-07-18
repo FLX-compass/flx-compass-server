@@ -101,7 +101,7 @@ const AttractionSchema = new mongoose.Schema({
          'shopping',
          'unknown'
       ],
-      defautl : 'unknown'
+      default : 'unknown'
    },
    lake: {
       type: String,

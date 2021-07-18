@@ -27,7 +27,6 @@ const ZIPCODE_FILE = path.resolve(__dirname, '../_data/zipcodes.json')
  * 
  */
 
-//{"_links":{"self":{"href":"=*"}},"page":{"size":200,"totalElements":0,"totalPages":0,"number":0}}
 
 exports.searchEvents = async (req, res, next) => {
 
@@ -102,7 +101,7 @@ async function parseEvent(eventsData) {
             startTime: data.dates.start.dateTime,
             priceLow: (data.priceRanges ? data.priceRanges[0].min : 0),
             priceHigh: (data.priceRanges ? data.priceRanges[0].max : 0),
-            category: 'game'
+            category: data.classifications[0].segment.name || "unknown"
         })
 
         if (data.images) {

@@ -66,7 +66,7 @@ router
    .put(protect, authorize('user', 'publisher', 'admin'), unBookmarkAttraction);
 
 router.
-   route('/radius/:lng/:lat/:zip')
+   route('/radius/:lng/:lat/:radius')
       .get(getAttractionsInRadiusWithLongLat)
 
 module.exports = router;

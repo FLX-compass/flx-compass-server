@@ -3,8 +3,6 @@ const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const geocoder = require('../utils/geocoder');
 const Attraction = require('../models/Attraction');
-const { truncate } = require('fs');
-const { createCipher } = require('crypto');
 const moment = require('moment');
 
 
@@ -25,8 +23,6 @@ exports.getAttraction = asyncHandler(async (req, res, next) => {
          return next(new ErrorResponse(`Attraction not found with ID of ${req.params.id}`, 404));
       }
 
-      
-      
       // increase view count
 
       attraction = await Attraction.findByIdAndUpdate(
@@ -134,6 +130,11 @@ exports.deleteAttraction = asyncHandler(async (req, res, next) => {
 // @access  Public
 exports.getAttractionsInRadius = asyncHandler(async (req, res, next) => {
    const { zipcode, distance } = req.params;
+
+   const {
+      lake,
+      category
+   }  = req.query;
    
    // Get lat/lng from geocoder
    const loc = await geocoder.geocode(zipcode);
@@ -145,9 +146,18 @@ exports.getAttractionsInRadius = asyncHandler(async (req, res, next) => {
    // Earth radius 3,963 mi / 6,378 km
    const radius = distance / 3963;
 
-   const attractions = await Attraction.find({
+   let params = {
       location: { $geoWithin: { $centerSphere: [ [ lng, lat ], radius ] } }
-   });
+   }
+
+   if(lake) {
+      params.lake = lake;
+   }
+   if (category){
+      params.category = category
+   }
+
+   const attractions = await Attraction.find(param);
 
    res.status(200).json({
       success: true,
@@ -361,20 +371,42 @@ exports.getAttractionsInRadiusWithLongLat = async (req, res, next) => {
    const {
       radius,
       lat,
-      lng
+      lng,
    } = req.params;
+
+   const {
+      category,
+      lake
+   } = req.query;
+
    let attractions;
 
-   try {
-      attractions = await Attraction.find({
-         location: {
-            $geoWithin: {
-               $centerSphere: [
-                  [lng, lat], radius
-               ]
-            }
+
+   const longitute = parseFloat(lng)
+   const latitude = parseFloat(lat)
+   const rad = parseInt(radius)
+
+   console.log(`${longitute} ${latitude} ${rad}`)
+
+   let params  = {
+      location: {
+         $geoWithin: {
+            $centerSphere: [
+               [longitute, latitude], rad
+            ]
          }
-      });
+      }
+   }
+
+   if (category) {
+      params.category = category
+   }
+   if(lake) {
+      params.lake = lake;
+   }
+
+   try {
+      attractions = await Attraction.find(params);
    }catch(err){
       return next(new ErrorResponse(`Error on finding attraction ${err}`, 404));
    }

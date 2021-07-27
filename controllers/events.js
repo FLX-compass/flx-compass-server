@@ -2,6 +2,8 @@ const path = require('path')
 const ErrorResponse = require('../utils/errorResponse');
 const geocoder = require('../utils/geocoder');
 const Events = require('../models/Event');
+const Attraction = require('../models/Attraction');
+const { runInNewContext } = require('vm');
 
 
 /**
@@ -119,6 +121,18 @@ exports.createEvent = async (req, res, next) => {
 
    let data = req.body;
    let event
+   let attraction
+
+
+   try {
+      attraction = await Attraction.findById(data.attraction).exec();
+
+      if(!attraction)
+      return next(new ErrorResponse(`No associated attraction id ${data.attraction}`));
+   }
+   catch(err){
+      return next(new ErrorResponse(`Error finding attraction data, error ${err}`))
+   }
 
    try {
       event = await Events.create(data);
@@ -242,7 +256,7 @@ exports.eventPhotoUpload = async (req, res, next) => {
 
 /**
  * 
- * @param {*} req 
+ * @param {*} req vs
  * @param {*} res 
  * @returns 
  * @desc Bookmark event

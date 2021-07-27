@@ -47,7 +47,7 @@ route('/getByCoords')
 
 router.
 route('/create')
-    .post(protect, authorize('publisher', 'admin'), createEvent)
+    .post(createEvent)
 
 
 router.

@@ -133,7 +133,9 @@ exports.getAttractionsInRadius = asyncHandler(async (req, res, next) => {
 
    const {
       lake,
-      category
+      category,
+      page,
+      limit
    }  = req.query;
    
    // Get lat/lng from geocoder
@@ -157,7 +159,7 @@ exports.getAttractionsInRadius = asyncHandler(async (req, res, next) => {
       params.category = category
    }
 
-   const attractions = await Attraction.find(param);
+   const attractions = await Attraction.paginate(params, {page, limit});
 
    res.status(200).json({
       success: true,
@@ -376,7 +378,9 @@ exports.getAttractionsInRadiusWithLongLat = async (req, res, next) => {
 
    const {
       category,
-      lake
+      lake,
+      page,
+      limit
    } = req.query;
 
    let attractions;
@@ -406,7 +410,7 @@ exports.getAttractionsInRadiusWithLongLat = async (req, res, next) => {
    }
 
    try {
-      attractions = await Attraction.find(params);
+      attractions = await Attraction.paginate(params, {page, limit});
    }catch(err){
       return next(new ErrorResponse(`Error on finding attraction ${err}`, 404));
    }

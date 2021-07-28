@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+const mongoosePaginate = require('mongoose-paginate-v2');
 const geocoder = require('../utils/geocoder');
 
 // REQUIRED FIELDS
@@ -176,6 +177,8 @@ const AttractionSchema = new mongoose.Schema({
       virtuals: true
    }
 });
+
+AttractionSchema.plugin(mongoosePaginate)
 
 // create Attraction slug from name
 AttractionSchema.pre('save', function (next) {

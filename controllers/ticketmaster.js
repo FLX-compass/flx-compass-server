@@ -38,30 +38,30 @@ exports.searchEvents = async (req, res, next) => {
             dow: 1,
         },
     })
-    let startOfTheWeek = moment().startOf('week').format('YYYY-MM-DDTHH:MM:ss[Z]').toString();
-    let endOfTheWeek = moment().endOf('week').format('YYYY-MM-DDTHH:MM:ss[Z]').toString();
+    let startDate = moment().format('YYYY-MM-DDTHH:MM:ss[Z]').toString();
+    let endDate = moment().add(1, 'M').format('YYYY-MM-DDTHH:MM:ss[Z]').toString();
 
-    console.log(`${startOfTheWeek} - ${endOfTheWeek}`)
+    console.log(`Debug of start and end of date => ${startDate} - ${endDate}`)
     //max is 200 items per page
     let dataSize = 200
     let resData = [];
     for (let element in ZIP_CODES) {
         console.log(`parsed zip code ${ZIP_CODES[element]}`);
 
-        // let searchURL = `https://app.ticketmaster.com/discovery/v2/events?apikey=aEpwS5axaLcuZrHEfULWaG3LXeYhs6Lb&postalCode=${ZIP_CODES[element]}&locale=*&startDateTime=${startOfTheWeek}&endDateTime=${endOfTheWeek}&size=${dataSize}`;
-        let searchURL = `https://app.ticketmaster.com/discovery/v2/events?apikey=aEpwS5axaLcuZrHEfULWaG3LXeYhs6Lb&postalCode=${ZIP_CODES[element]}&locale=*`;
+        let searchURL = `https://app.ticketmaster.com/discovery/v2/events?apikey=aEpwS5axaLcuZrHEfULWaG3LXeYhs6Lb&postalCode=${ZIP_CODES[element]}&locale=*&startDateTime=${startDate}&endDateTime=${endDate}&size=${dataSize}`;
+        // let searchURL = `https://app.ticketmaster.com/discovery/v2/events?apikey=aEpwS5axaLcuZrHEfULWaG3LXeYhs6Lb&postalCode=${ZIP_CODES[element]}&locale=*`;
         let {
             body,
             error
         } = await got(searchURL);
         if (error) {
+            console.log(`got error on initial ticketmaster error: \n${error}`)
             return res.json({
                 error
             })
         }
 
         body = JSON.parse(body)
-
 
 
         const countData = parsePage(body);
@@ -75,9 +75,9 @@ exports.searchEvents = async (req, res, next) => {
         } else {
             try {
                 await parseEvent(body["_embedded"]["events"]);
-                res.json({success: true})
+                return res.json({success: true})
             }catch(error){
-                res.json({success: false, error})
+                return res.json({success: false, error})
             }
             
         }
@@ -101,7 +101,7 @@ async function parseEvent(eventsData) {
             startTime: data.dates.start.dateTime,
             priceLow: (data.priceRanges ? data.priceRanges[0].min : 0),
             priceHigh: (data.priceRanges ? data.priceRanges[0].max : 0),
-            category: data.classifications[0].segment.name || "unknown"
+            category: data.classifications[0].segment.name.toLowerCase() || "unknown"
         })
 
         if (data.images) {
@@ -114,6 +114,7 @@ async function parseEvent(eventsData) {
                 if (!event.image) {
                     event.image = []
                 }
+                console.log(`Debug of photo => ${savedImage}`)
                 if (savedImage != null) {
                     event.image.push(savedImage)
                 }
@@ -175,10 +176,7 @@ async function parseAttraction(data, eventID) {
                 })
 
                 if(savedPath){
-                    
-                    attraction.photos.push({
-                        savedPath
-                    })
+                    attraction.photos.push(savedPath)
                 }
             }))
 
@@ -211,17 +209,22 @@ async function imageParser(opts) {
         height
     } = opts;
     const filename = url.match(/[\w\.\$]+(?=png|jpg|jpeg)\w+/g);
-    let saveFilePath = path.resolve(`${process.env.FILE_UPLOAD_PATH}/${filename[0]}`);
+
+    let saveFilePath = path.resolve(`${process.env.FILE_UPLOAD_PATH}/${filename[0].toString()}`);
+    console.log(`debug of savefilepath => ${saveFilePath}`)
+    let response
     try {
-        let response = await got.get(url);
+        response= await got.get(url);
         if (response.statusCode !== 200) {
             return null
         }
-        fs.writeFileSync(saveFilePath, response.body)
-        return filename[0];
+        // console.log(`Debug of image save path => ${saveFilePath}`)
     }catch(error) {
         console.log(`error on request \n${error}`)
+        return null;
     }
+    fs.writeFileSync(saveFilePath, response.body)
+    return saveFilePath.toString();
 }
 
 function parsePage(data) {

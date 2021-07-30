@@ -388,7 +388,7 @@ exports.getAttractionsInRadiusWithLongLat = async (req, res, next) => {
 
    const longitute = parseFloat(lng)
    const latitude = parseFloat(lat)
-   const rad = parseInt(radius)
+   const rad = parseFloat(radius)
 
    console.log(`${longitute} ${latitude} ${rad}`)
 

@@ -84,6 +84,7 @@ const EventSchema = new mongoose.Schema({
       "nerdy",
       "musical",
       "speaker",
+      "unknown"
     ],
   },
   source: {

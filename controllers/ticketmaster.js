@@ -70,7 +70,7 @@ exports.searchEvents = async (req, res, next) => {
             console.log(`countdata is ${countData}`)
             resData.push({
                 zipCode: ZIP_CODES[element],
-                message: `No data for ${ZIP_CODES[element]} for dates ${startOfTheWeek} - ${endOfTheWeek}`
+                message: `No data for ${ZIP_CODES[element]} for dates ${startDate} - ${endDate}`
             })
         } else {
             try {
